@@ -1,4 +1,5 @@
 <script>
+  import { Button } from 'attractions';
   let isHalfDay = false;
   let isWorking = false;
   let remainingTime = 0;
@@ -56,6 +57,7 @@
 
 <main>
   <h1>칼퇴 요정🧚🏻‍♀️</h1>
+  <Button>click me</Button>
 
   <!-- 현재 시간 표시 -->
   <h3>현재 시간: {formatTime(currentTime.getHours() * 3600 + currentTime.getMinutes() * 60 + currentTime.getSeconds())}</h3>
