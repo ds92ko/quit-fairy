@@ -1,5 +1,7 @@
 <script>
-  import { Button } from 'attractions';
+  import { formatDate, formatTime12Hour, formatTime24Hour } from './lib/utils/format.js'
+  import { Button, Divider } from 'attractions';
+  import Header from './lib/components/Header.svelte';
   let isHalfDay = false;
   let isWorking = false;
   let remainingTime = 0;
@@ -33,34 +35,17 @@
     }, 1000);
   }
 
-  // HH:MM:ss 형식으로 시간 포맷하는 함수
-  function formatTime(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  }
-
-  // 매초마다 현재 시간 갱신
-  setInterval(() => {
-    currentTime = new Date();
-  }, 1000);
-
   // 앱이 처음 시작할 때 자동으로 출근
   autoClockIn();
 </script>
 
-<svelte:head>
-  <title>칼퇴 요정🧚🏻‍♀️</title>
-  <meta name="description" content="칼퇴요정은 근무 종료 시간을 추적하고 퇴근 시간이 되면 알림을 주는 데스크탑 앱입니다." />
-</svelte:head>
-
+<Header bind:currentTime />
 <main>
   <h1>칼퇴 요정🧚🏻‍♀️</h1>
   <Button>click me</Button>
 
   <!-- 현재 시간 표시 -->
-  <h3>현재 시간: {formatTime(currentTime.getHours() * 3600 + currentTime.getMinutes() * 60 + currentTime.getSeconds())}</h3>
+  <h3>현재 시간: {formatTime12Hour(currentTime)}</h3>
 
   <!-- 반차 여부 체크 -->
   <label>
@@ -70,14 +55,14 @@
 
   <!-- 타이머 및 시간 정보 -->
   {#if isWorking}
-    <h2>퇴근까지 남은시간: {formatTime(remainingTime)}</h2>
+    <!-- <h2>퇴근까지 남은시간: {formatTime(remainingTime)}</h2> -->
   {/if}
 
     <!-- 출근 시간 표시 -->
-    <h3>출근 시간: {clockInTime ? formatTime(clockInTime.getHours() * 3600 + clockInTime.getMinutes() * 60 + clockInTime.getSeconds()) : ''}</h3>
+    <!-- <h3>출근 시간: {clockInTime ? formatTime(clockInTime.getHours() * 3600 + clockInTime.getMinutes() * 60 + clockInTime.getSeconds()) : ''}</h3> -->
 
     <!-- 퇴근 시간 표시 -->
-    <h3>퇴근 시간: {clockOutTime ? formatTime((clockOutTime.getHours() * 3600) + (clockOutTime.getMinutes() * 60) + clockOutTime.getSeconds()) : ''}</h3>
+    <!-- <h3>퇴근 시간: {clockOutTime ? formatTime((clockOutTime.getHours() * 3600) + (clockOutTime.getMinutes() * 60) + clockOutTime.getSeconds()) : ''}</h3> -->
 
 
   <!-- 야근중 문구 -->

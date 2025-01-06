@@ -1,0 +1,57 @@
+<script>
+  import { formatDate, formatTime12Hour, formatTime24Hour } from '../utils/format.js';
+
+  setInterval(() => {
+    currentTime = new Date();
+  }, 100);
+
+  export let currentTime = new Date();
+</script>
+
+<header class="header">
+  <div class="container">
+    <div class="content">
+      <h1 class="logo">
+        <img src="/images/logo.png" alt="칼퇴 요정" class="logo-image" />
+        <span>칼퇴 요정</span>
+      </h1>
+      <div class="current-time">
+        <p>{formatDate(currentTime)}</p>
+        <p>{formatTime12Hour(currentTime)}</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    background: rgba(67, 0, 176, 0.03);
+    padding-block: 14px;
+    border-bottom: 1px solid rgba(67, 0, 176, 0.25);
+  }
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 24px;
+    color: #333;
+  }
+
+  .logo-image {
+    width: 50px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .current-time {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+  }
+</style>
