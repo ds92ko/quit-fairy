@@ -7,7 +7,7 @@
 {#if message}
   <div class="toast">
     <div class="container">
-      <Snackbar text={message} />
+      <Snackbar text={message} transitionOptions={{ x: 0, y: 20, duration: 150 }} />
     </div>
   </div>
 {/if}
