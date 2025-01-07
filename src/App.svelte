@@ -30,7 +30,7 @@
       <Divider />
     {/if}
     {#if selectedTab === '근무 확인'}
-      <WorkTracker {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} />
+      <WorkTracker {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} bind:notification />
     {:else if selectedTab === '근무 설정'}
       <WorkSetup bind:isHalfDay bind:hasLunch bind:clockInTime />
     {/if}
