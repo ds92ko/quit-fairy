@@ -7,6 +7,7 @@
   export let hasLunch = false;
   export let clockInTime = new Date();
   export let clockOutTime;
+  export let notification = '';
 
   const workType = isHalfDay ? `식사 ${hasLunch ? '포함' : '제외'} 반차 사용` : '종일';
   const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
@@ -14,6 +15,19 @@
   let infoMessage = '';
   let progress = 0;
   let workingTime = 0;
+
+  const setReminderNotification = () => {
+    if (clockOutTime) {
+      const timeDifference = clockOutTime - new Date();
+      const reminderTime = timeDifference - 10 * 60 * 1000;
+
+      if (reminderTime > 0) {
+        setTimeout(() => {
+          notification = '퇴근 10분 전입니다! 마무리 작업을 시작하세요 😊';
+        }, reminderTime);
+      }
+    }
+  };
 
   const updateRemainingTime = () => {
     if (clockOutTime) {
@@ -33,6 +47,9 @@
       }
     }
   };
+
+  // 상태가 변경될 때마다 퇴근 알림 설정
+  $: clockOutTime, setReminderNotification();
 
   updateRemainingTime();
   setInterval(updateRemainingTime, 100);
