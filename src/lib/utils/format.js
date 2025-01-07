@@ -23,9 +23,9 @@ export function formatDate(date) {
  * @returns {string} "오전 HH:MM:SS" 또는 "오후 HH:MM:SS" 형식의 시간 문자열.
  * @example
  * const date = new Date('2025-01-06T12:30:00');
- * formatTime12Hour(date); // "오후 12:30:00"
+ * formatTime(date); // "오후 12:30:00"
  */
-export function formatTime12Hour(date) {
+export function formatTime(date) {
   const hours24 = date.getHours();
   const hours = hours24 % 12 || 12;
   const minutes = date.getMinutes();
@@ -35,17 +35,23 @@ export function formatTime12Hour(date) {
 }
 
 /**
- * 주어진 Date 객체를 24시간제 형식의 문자열로 변환합니다.
- *
- * @param {Date} date - 변환할 Date 객체.
- * @returns {string} "HH:MM:SS" 형식의 시간 문자열.
+ * 주어진 밀리초(milliseconds)를 시간, 분, 초로 변환하여 포맷합니다.
+ * 
+ * @param {number} milliseconds - 변환할 밀리초 값
+ * @returns {string} 변환된 시간 포맷 (예: "2시간 30분 45초")
+ * 
  * @example
- * const date = new Date('2025-01-06T12:30:00');
- * formatTime24Hour(date); // "12:30:00"
+ * // 2시간 30분 45초
+ * formatDuration(9045000);
+ * 
+ * @example
+ * // 0시간 5분 30초
+ * formatDuration(330000);
  */
-export function formatTime24Hour(date) {
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+export function formatDuration(milliseconds) {
+  const hours = Math.floor(milliseconds / 1000 / 60 / 60);
+  const minutes = Math.floor((milliseconds / 1000 / 60) % 60);
+  const seconds = Math.floor((milliseconds / 1000) % 60);
+
+  return `${hours}시간 ${minutes}분 ${seconds}초`;
 }

@@ -1,5 +1,5 @@
 <script>
-  import { formatDate, formatTime12Hour } from '../utils/format.js';
+  import { formatDate, formatTime } from '../utils/format.js';
 
   setInterval(() => {
     currentTime = new Date();
@@ -17,7 +17,7 @@
       </h1>
       <div class="current-time">
         <p>{formatDate(currentTime)}</p>
-        <p>{formatTime12Hour(currentTime)}</p>
+        <p>{formatTime(currentTime)}</p>
       </div>
     </div>
   </div>
