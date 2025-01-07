@@ -1,12 +1,12 @@
 <script>
 	export let progress = 0;
+
   let angle, background, cssVarStyles;
 
 	$: angle = Math.min(360 * (progress / 100), 360);
 	$: background = `radial-gradient(white 55%, transparent 56%),
     conic-gradient(transparent 0deg ${angle}deg, #f5f5f5 ${angle}deg 360deg),
     conic-gradient(rgba(67, 0, 176, 0.25) 0deg, rgba(67, 0, 176, 0.5) 90deg, rgba(67, 0, 176, 0.75) 180deg, rgba(67, 0, 176, 1));`;
-
   $: cssVarStyles = `--background:${background}`;
 </script>
 
@@ -25,7 +25,7 @@
     aspect-ratio: 1 / 1;
     transition: background-color 500ms ease-in;
     will-change: transform;
-    margin: 0 auto;
+    margin: 20px auto 0;
     container: progress-circle / inline-size;
   }
 
