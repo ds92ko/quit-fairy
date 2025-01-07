@@ -40,5 +40,5 @@
 <Toast {message} />
 
 {#if selectedTab !== '근무 기록'}
-  <Footer />
+  <Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:message bind:selectedTab />
 {/if}
