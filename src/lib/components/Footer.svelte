@@ -2,6 +2,7 @@
   import { Button } from 'attractions';
 
   export let isHalfDay = false;
+  export let hasLunch = false;
   export let clockInTime = new Date();
   export let clockOutTime;
   export let message;
@@ -9,6 +10,7 @@
   const handleClick = () => {
     if (clockOutTime) {
       isHalfDay = false;
+      hasLunch = false;
       clockInTime = new Date();
       clockOutTime = null;
       message = '퇴근했습니다. 오늘도 수고하셨습니다 😚';
@@ -16,7 +18,7 @@
         message = '';
       }, 2000);
     } else {
-      const workHours = isHalfDay ? 4 : 9;
+      const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
       const outTime = new Date(clockInTime);
 
       outTime.setHours(outTime.getHours() + workHours);
