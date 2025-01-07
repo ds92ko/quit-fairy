@@ -15,7 +15,7 @@ function isDev() {
 function createWindow() {    
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 800,
+        width: 400,
         height: 600,
         webPreferences: {
             nodeIntegration: true,
