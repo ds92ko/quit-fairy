@@ -56,7 +56,7 @@
 </script>
 
 <section>
-  <H2>⏳ 근무 진척도</H2>
+  <H2>⏳ 근무 진행도</H2>
   <H3>{infoMessage}</H3>
   <CircleProgressBar {progress} />
 </section>
