@@ -3,8 +3,16 @@
 
   export let notification;
 
+  const requestNotificationPermission = async () => {
+    if (Notification.permission !== 'granted') {
+      await Notification.requestPermission();
+    }
+  };
+
   $: if (notification) {
-    new Notification('칼퇴 요정', { body: notification });
+    requestNotificationPermission().then(() => {
+      new Notification('칼퇴 요정', { body: notification });
+    });
     setTimeout(() => {
       notification = '';
     }, 2000);
