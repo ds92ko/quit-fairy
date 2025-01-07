@@ -35,5 +35,19 @@
 
 <section>
   <H2>📝 근무 기록</H2>
-  <Table {headers} {items} alternatingRows={false} />
+  <div class="content">
+    <div class="table">
+      <Table {headers} {items} alternatingRows={false} />
+    </div>
+  </div>
 </section>
+
+<style>
+  .content {
+    overflow-x: auto;
+  }
+
+  .table {
+    width: max-content;
+  }
+</style>
