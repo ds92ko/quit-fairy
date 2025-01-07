@@ -6,6 +6,7 @@
   export let clockInTime = new Date();
   export let clockOutTime;
   export let message;
+  export let selectedTab;
 
   const handleClick = () => {
     if (clockOutTime) {
@@ -13,6 +14,7 @@
       hasLunch = false;
       clockInTime = new Date();
       clockOutTime = null;
+      selectedTab = '근무 설정';
       message = '퇴근했습니다. 오늘도 수고하셨습니다 😚';
       setTimeout(() => {
         message = '';
@@ -23,6 +25,7 @@
 
       outTime.setHours(outTime.getHours() + workHours);
       clockOutTime = outTime;
+      selectedTab = '근무 확인';
       message = '출근했습니다. 오늘도 화이팅하세요 💪';
       setTimeout(() => {
         message = '';
@@ -34,7 +37,7 @@
 <footer class="footer">
   <div class="container">
     <div class="content">
-      <Button filled on:click={handleClick}>{clockOutTime ? '퇴근하기' : '출근하기'}</Button>
+      <Button filled on:click={handleClick}>{clockOutTime ? '퇴근' : '출근'}하기</Button>
     </div>
   </div>
 </footer>
