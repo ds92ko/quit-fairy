@@ -1,11 +1,5 @@
 <script>
   import { H2, Table } from 'attractions';
-  import { formatDate, formatTime } from '../utils/format.js';
-
-  export let isHalfDay = false;
-  export let hasLunch = false;
-  export let clockInTime = new Date();
-  export let clockOutTime;
 
   const headers = [
     { text: '날짜', value: 'date' },
@@ -16,19 +10,26 @@
   ];
   const items = [
     {
-      date: formatDate(clockInTime),
-      clockInTime: formatTime(clockInTime),
-      clockOutTime: formatTime(clockOutTime),
-      workType: isHalfDay ? `반차 (식사 ${hasLunch ? '포함' : '제외'})` : '종일',
-      workTime: isHalfDay ? (hasLunch ? '5시간' : '4시간') : '9시간'
+      date: '2025년 01월 07일 (화)',
+      clockInTime: '오전 09:00:00',
+      clockOutTime: '오후 06:00:00',
+      workType: '종일',
+      workTime: '9시간'
     },
     {
-      date: formatDate(clockInTime),
-      clockInTime: formatTime(clockInTime),
-      clockOutTime: formatTime(clockOutTime),
-      workType: isHalfDay ? `반차 (식사 ${hasLunch ? '포함' : '제외'})` : '종일',
-      workTime: isHalfDay ? (hasLunch ? '5시간' : '4시간') : '9시간'
-    }
+      date: '2025년 01월 07일 (화)',
+      clockInTime: '오전 09:00:00',
+      clockOutTime: '오후 01:00:00',
+      workType: '반차 (식사 제외)',
+      workTime: '4시간'
+    },
+    {
+      date: '2025년 01월 07일 (화)',
+      clockInTime: '오전 09:00:00',
+      clockOutTime: '오후 02:00:00',
+      workType: '반차 (식사 포함)',
+      workTime: '5시간'
+    },
   ];
 </script>
 
