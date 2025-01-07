@@ -34,9 +34,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
   }
 
   .logo {
+    flex: 1;
+    width: 100%;
     display: flex;
     align-items: center;
     font-weight: 600;
@@ -50,8 +53,16 @@
   }
 
   .current-time {
+    flex: 1;
+    width: 100%;
     display: flex;
     flex-direction: column;
     text-align: right;
+  }
+
+  @media screen and (max-width: 380px) {
+    .content {
+      flex-direction: column;
+    }
   }
 </style>
