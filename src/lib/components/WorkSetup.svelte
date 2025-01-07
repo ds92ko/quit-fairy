@@ -12,7 +12,7 @@
 </script>
 
 <section>
-  <H2>⏱️ 근무 설정</H2>
+  <H2>⏱️ 출근 하기</H2>
   <div class="card">
     <FormField name="⏰ 출근 시간" required>
       <TimePicker name="clockInTime" format="%H:%M:%S %P" bind:value={clockInTime}/>
