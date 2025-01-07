@@ -6,7 +6,7 @@
 
   let items;
   
-  $: items = [clockOutTime ? '근무 확인' : '근무 설정', '근무 기록'];
+  $: items = [clockOutTime ? '근무 상태' : '근무 설정', '근무 기록'];
 </script>
 
 <div class="nav">
@@ -17,7 +17,6 @@
 
 <style>
   .nav {
-    padding-top: 20px;
     position: relative;
     display: flex;
     background: #fff;

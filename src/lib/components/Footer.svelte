@@ -22,7 +22,7 @@
 
       outTime.setHours(outTime.getHours() + workHours);
       clockOutTime = outTime;
-      selectedTab = '근무 확인';
+      selectedTab = '근무 상태';
       notification = '출근했습니다! 오늘도 화이팅하세요 💪';
     }
   }
