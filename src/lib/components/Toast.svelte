@@ -22,7 +22,7 @@
 {#if notification}
   <div class="toast">
     <div class="container">
-      <Snackbar text={notification} transitionOptions={{ x: 0, y: 20, duration: 150 }} />
+      <Snackbar text={notification} transitionOptions={{ x: 0, y: 20, duration: 150 }} closeCallback={() => {}} />
     </div>
   </div>
 {/if}
