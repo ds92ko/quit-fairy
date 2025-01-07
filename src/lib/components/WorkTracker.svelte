@@ -11,7 +11,7 @@
   const workType = isHalfDay ? `식사 ${hasLunch ? '포함' : '제외'} 반차 사용` : '종일';
   const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
 
-  let message = '';
+  let infoMessage = '';
   let progress = 0;
   let workingTime = 0;
 
@@ -21,14 +21,14 @@
       const timeDiff = clockOutTime - now;
 
       if (timeDiff > 0) {
-        message = `${formatDuration(timeDiff)} 후 퇴근`;
+        infoMessage = `${formatDuration(timeDiff)} 후 퇴근`;
         workingTime = (new Date() - clockInTime) / (clockOutTime - clockInTime);
         progress = Math.min(workingTime * 100, 100);
         progress = Math.floor(progress);
       } else {
         const overdueTime = Math.abs(timeDiff);
 
-        message = `${formatDuration(overdueTime)} 초과 근무`;
+        infoMessage = `${formatDuration(overdueTime)} 초과 근무`;
         progress = 100;
       }
     }
@@ -40,7 +40,7 @@
 
 <section>
   <H2>⏳ 근무 진척도</H2>
-  <H3>{message}</H3>
+  <H3>{infoMessage}</H3>
   <CircleProgressBar {progress} />
 </section>
 <Divider />
