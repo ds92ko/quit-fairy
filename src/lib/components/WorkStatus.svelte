@@ -13,12 +13,8 @@
 
 <section>
   <div class="content">
-    <div class="message">
-      <p>{statusMessageMap[status]}</p>
-    </div>
-    <div class="image">
-      <img src={src} alt={statusMessageMap[status]} />
-    </div>
+    <p class="message">{statusMessageMap[status]}</p>
+    <img class="image" src={src} alt={statusMessageMap[status]} />
   </div>
 </section>
 
@@ -51,6 +47,11 @@
     border-right: 0;
     margin-left: -10px;
     margin-bottom: -20px;
+  }
+
+  .image {
+    width: 100%;
+    max-width: 200px;
   }
 </style>
 
