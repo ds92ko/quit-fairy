@@ -29,6 +29,7 @@ main {
 }
 
 section {
+  position: relative;
   padding-block: 20px;
 }
 
