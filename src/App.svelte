@@ -6,7 +6,6 @@
   import Footer from './lib/components/Footer.svelte';
   import WorkStatus from './lib/components/WorkStatus.svelte';
   import Nav from './lib/components/Nav.svelte';
-  import { Divider } from 'attractions';
   import WorkLog from './lib/components/WorkLog.svelte';
 
   let currentTime = new Date();
@@ -22,17 +21,14 @@
 
 <main>
   <div class="container">
+    <WorkStatus {clockOutTime} />
     <Nav {clockOutTime} bind:selectedTab />
-    {#if selectedTab === '근무 기록'}
-      <WorkLog {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} />
-    {:else}
-      <WorkStatus {clockOutTime} />
-      <Divider />
-    {/if}
-    {#if selectedTab === '근무 확인'}
+    {#if selectedTab === '근무 상태'}
       <WorkTracker {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} bind:notification />
     {:else if selectedTab === '근무 설정'}
       <WorkSetup bind:isHalfDay bind:hasLunch bind:clockInTime />
+    {:else if selectedTab === '근무 기록'}
+      <WorkLog {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} />
     {/if}
   </div>
 </main>
