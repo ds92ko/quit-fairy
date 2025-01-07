@@ -1,11 +1,11 @@
 <script>
   import { formatDate, formatTime } from '../utils/format.js';
+  
+  export let currentTime = new Date();
 
   setInterval(() => {
     currentTime = new Date();
   }, 100);
-
-  export let currentTime = new Date();
 </script>
 
 <header class="header">
