@@ -14,7 +14,7 @@
   let hasLunch = false;
   let clockInTime;
   let clockOutTime;
-  let message = '';
+  let notification = '';
   let selectedTab = '근무 설정';
 </script>
 
@@ -37,8 +37,8 @@
   </div>
 </main>
 
-<Toast {message} />
+<Toast {notification} />
 
 {#if selectedTab !== '근무 기록'}
-  <Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:message bind:selectedTab />
+  <Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:notification bind:selectedTab />
 {/if}

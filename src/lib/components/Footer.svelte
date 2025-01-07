@@ -5,7 +5,7 @@
   export let hasLunch = false;
   export let clockInTime = new Date();
   export let clockOutTime;
-  export let message;
+  export let notification;
   export let selectedTab;
 
   const handleClick = () => {
@@ -15,10 +15,7 @@
       clockInTime = new Date();
       clockOutTime = null;
       selectedTab = '근무 설정';
-      message = '퇴근했습니다. 오늘도 수고하셨습니다 😚';
-      setTimeout(() => {
-        message = '';
-      }, 2000);
+      notification = '퇴근했습니다! 오늘도 수고하셨습니다 😚';
     } else {
       const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
       const outTime = new Date(clockInTime);
@@ -26,10 +23,7 @@
       outTime.setHours(outTime.getHours() + workHours);
       clockOutTime = outTime;
       selectedTab = '근무 확인';
-      message = '출근했습니다. 오늘도 화이팅하세요 💪';
-      setTimeout(() => {
-        message = '';
-      }, 2000);
+      notification = '출근했습니다! 오늘도 화이팅하세요 💪';
     }
   }
 </script>

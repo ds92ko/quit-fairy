@@ -1,13 +1,20 @@
 <script>
   import { Snackbar } from 'attractions';
 
-  export let message;
+  export let notification;
+
+  $: if (notification) {
+    new Notification('칼퇴 요정', { body: notification });
+    setTimeout(() => {
+      notification = '';
+    }, 2000);
+  }
 </script>
 
-{#if message}
+{#if notification}
   <div class="toast">
     <div class="container">
-      <Snackbar text={message} transitionOptions={{ x: 0, y: 20, duration: 150 }} />
+      <Snackbar text={notification} transitionOptions={{ x: 0, y: 20, duration: 150 }} />
     </div>
   </div>
 {/if}
