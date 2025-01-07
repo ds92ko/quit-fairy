@@ -28,7 +28,7 @@
     {:else if selectedTab === '근무 설정'}
       <WorkSetup bind:isHalfDay bind:hasLunch bind:clockInTime />
     {:else if selectedTab === '근무 기록'}
-      <WorkLog {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} />
+      <WorkLog />
     {/if}
   </div>
 </main>
