@@ -1,40 +1,92 @@
 <script>
-  import { Button } from 'attractions';
+  import { Button, Modal, Dialog } from 'attractions';
+  import { deleteWorkLog, setWorkLog, getWorkLog } from '../store/workLog.js';
 
   export let isHalfDay = false;
   export let hasLunch = false;
   export let clockInTime = new Date();
   export let clockOutTime;
-  export let notification;
-  export let selectedTab;
+  export let notification = { message: '', onlyToast: false };
+  export let selectedTab = '근무 설정';
+  export let logData = [];
 
-  const handleClick = () => {
+  let disabled = true;
+  let modalOpen = false;
+
+  const handleSetWorkLog = () => {
     if (clockOutTime) {
+      setWorkLog({
+        clockInTime,
+        scheduledOutTime: clockOutTime,
+        actualOutTime: new Date(),
+        isHalfDay,
+        hasLunch,
+      });
+
       isHalfDay = false;
       hasLunch = false;
       clockInTime = new Date();
       clockOutTime = null;
       selectedTab = '근무 설정';
-      notification = '퇴근했습니다! 오늘도 수고하셨습니다 😚';
+      notification = { message: '퇴근했습니다! 오늘도 수고하셨습니다 😚' };
     } else {
       const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
       const outTime = new Date(clockInTime);
 
       outTime.setHours(outTime.getHours() + workHours);
+
+      setWorkLog({
+        clockInTime,
+        scheduledOutTime: outTime,
+        isHalfDay,
+        hasLunch,
+      });
+
       clockOutTime = outTime;
       selectedTab = '근무 상태';
-      notification = '출근했습니다! 오늘도 화이팅하세요 💪';
+      notification = { message: '출근했습니다! 오늘도 화이팅하세요 💪' };
     }
   }
+
+  const handleOpenModal = () => modalOpen = true;
+
+  const handleCloseModal = () => modalOpen = false;
+
+  const handleDeleteWorkLog = async () => {
+    await deleteWorkLog();
+    logData = await getWorkLog();
+    notification = { message: '근무 기록을 모두 삭제했습니다! 🗑️', onlyToast: true};
+    handleCloseModal();
+  }
+
+  const setDisabled = async () => disabled = logData.length === 0;
+
+  $: logData, setDisabled();
 </script>
 
 <footer class="footer">
   <div class="container">
     <div class="content">
-      <Button filled on:click={handleClick}>{clockOutTime ? '퇴근' : '출근'}하기</Button>
+      {#if selectedTab === '근무 기록'}
+        <Button filled on:click={handleOpenModal} disabled={disabled}>전체삭제</Button>
+      {:else}
+        <Button filled on:click={handleSetWorkLog}>{clockOutTime ? '퇴근' : '출근'}하기</Button>
+      {/if}
     </div>
   </div>
 </footer>
+
+<Modal bind:open={modalOpen} let:closeCallback>
+  <Dialog title="근무 기록 전체 삭제" danger {closeCallback}>
+    <div slot="title-icon">⚠️</div>
+    <p>근무 기록을 모두 삭제할까요?</p>
+    <p>삭제된 데이터는 다시 복구할 수 없습니다!</p>
+    <div class="modal-button">
+      <Button outline on:click={handleCloseModal}>취소</Button>
+      <Button danger outline on:click={handleDeleteWorkLog}>삭제</Button>
+    </div>
+  </Dialog>
+</Modal>
 
 <style>
   .footer {
@@ -46,5 +98,12 @@
   .content {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .modal-button {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 12px;
+    margin-top: 20px;
   }
 </style>

@@ -1,50 +1,60 @@
 <script>
-  import { H2, Table } from 'attractions';
+  import { onMount } from 'svelte';
+  import { H2, Table, Loading } from 'attractions';
+  import { getWorkLog } from '../store/workLog.js';
 
+  export let logData = [];
+
+  let loading = true;
   const headers = [
+    { text: '근무 유형', value: 'workType' },
     { text: '날짜', value: 'date' },
     { text: '출근 시간', value: 'clockInTime' },
-    { text: '퇴근 시간', value: 'clockOutTime' },
-    { text: '근무 시간', value: 'workTime' },
-    { text: '근무 유형', value: 'workType' },
+    { text: '퇴근 예정 시간', value: 'scheduledOutTime' },
+    { text: '실제 퇴근 시간', value: 'actualOutTime' },
+    { text: '총 근무 시간', value: 'workTime' },
   ];
-  const items = [
-    {
-      date: '2025년 01월 07일 (화)',
-      clockInTime: '오전 09:00:00',
-      clockOutTime: '오후 06:00:00',
-      workType: '종일',
-      workTime: '9시간'
-    },
-    {
-      date: '2025년 01월 07일 (화)',
-      clockInTime: '오전 09:00:00',
-      clockOutTime: '오후 01:00:00',
-      workType: '반차 (식사 제외)',
-      workTime: '4시간'
-    },
-    {
-      date: '2025년 01월 07일 (화)',
-      clockInTime: '오전 09:00:00',
-      clockOutTime: '오후 02:00:00',
-      workType: '반차 (식사 포함)',
-      workTime: '5시간'
-    },
-  ];
+
+  onMount(async () => {
+    logData = await getWorkLog();
+    loading = false;
+  });
 </script>
 
 <section>
   <H2>📝 근무 기록</H2>
   <div class="content">
-    <div class="table">
-      <Table {headers} {items} alternatingRows={false} />
-    </div>
+    {#if loading}
+      <div class="loading">
+        <Loading />
+        <p>잠시만 기다려주세요... ⏳✨</p>
+      </div>
+    {:else}
+      {#if logData.length === 0}
+        <div class="card">
+          <p>근무 기록이 없습니다. 😢</p>
+        </div>
+      {:else}
+        <div class="table">
+          <Table {headers} items={logData} alternatingRows={false} />
+        </div>
+      {/if}
+    {/if}
   </div>
 </section>
 
 <style>
   .content {
     overflow-x: auto;
+  }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 20px;
+    padding-block: 50px;
+    text-align: center;
   }
 
   .table {

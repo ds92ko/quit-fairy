@@ -1,7 +1,7 @@
 <script>
   import { Snackbar } from 'attractions';
 
-  export let notification;
+  export let notification = { message: '', onlyToast: false };
 
   const requestNotificationPermission = async () => {
     if (Notification.permission !== 'granted') {
@@ -9,20 +9,25 @@
     }
   };
 
-  $: if (notification) {
-    requestNotificationPermission().then(() => {
-      new Notification('칼퇴 요정', { body: notification });
-    });
+  $: if (notification.message) {
+    if (!notification.onlyToast) {
+      requestNotificationPermission().then(() => {
+        new Notification('칼퇴 요정', { body: notification.message });
+      });
+    }
     setTimeout(() => {
-      notification = '';
+      notification = {
+        message: '',
+        onlyToast: false,
+      };
     }, 2000);
   }
 </script>
 
-{#if notification}
+{#if notification.message}
   <div class="toast">
     <div class="container">
-      <Snackbar text={notification} transitionOptions={{ x: 0, y: 20, duration: 150 }} closeCallback={() => {}} />
+      <Snackbar text={notification.message} transitionOptions={{ x: 0, y: 20, duration: 150 }} closeCallback={() => {}} />
     </div>
   </div>
 {/if}
