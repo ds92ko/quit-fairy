@@ -3,9 +3,7 @@
   
   export let currentTime = new Date();
 
-  setInterval(() => {
-    currentTime = new Date();
-  }, 100);
+  setInterval(() => currentTime = new Date(), 100);
 </script>
 
 <header class="header">
