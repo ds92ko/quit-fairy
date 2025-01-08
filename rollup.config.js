@@ -38,41 +38,38 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		// Svelte 플러그인 설정
 		svelte({
+			// Svelte 파일에서 전처리 기능을 설정합니다.
 			preprocess: sveltePreprocess({ /* options */ }),
 			compilerOptions: {
-				// enable run-time checks when not in production
+				// 프로덕션 환경이 아닌 경우 런타임 체크 활성화
 				dev: !production
 			},
 		}),
-		// we'll extract any component CSS out into
-		// a separate file - better for performance
+		// 컴포넌트의 CSS를 별도의 파일로 추출합니다.
+		// 성능을 향상시키기 위해 별도의 파일로 분리합니다.
 		css({ output: 'bundle.css' }),
 
-		// If you have external dependencies installed from
-		// npm, you'll most likely need these plugins. In
-		// some cases you'll need additional configuration -
-		// consult the documentation for details:
-		// https://github.com/rollup/plugins/tree/master/packages/commonjs
+		// npm에서 설치한 외부 의존성이 있는 경우 필요한 플러그인입니다.
+		// 경우에 따라 추가 설정이 필요할 수 있습니다.
 		resolve({
 			browser: true,
-			dedupe: ['svelte']
+			dedupe: ['svelte'] // 중복을 방지하도록 설정
 		}),
 		commonjs(),
 
-		// In dev mode, call `npm run start` once
-		// the bundle has been generated
+		// 개발 모드일 경우 번들링 후 서버를 시작합니다.
 		!production && serve(),
 
-		// Watch the `public` directory and refresh the
-		// browser on changes when not in production
+		// 프로덕션 환경이 아닐 때 'public' 디렉토리를 감시하고 변경 시 브라우저를 새로 고칩니다.
 		!production && livereload('public'),
 
-		// If we're building for production (npm run build
-		// instead of npm run dev), minify
+		// 프로덕션 빌드를 위한 설정 - 압축
 		production && terser()
 	],
 	watch: {
+		// 화면을 지우지 않도록 설정
 		clearScreen: false
 	}
 };
