@@ -1,6 +1,7 @@
 <script>
   export let clockOutTime;
 
+  let status, src;
   const statusMessageMap = {
     BEFORE_WORK: '출근 전! 오늘도 힘차게 시작해볼까? 😎',
     WORKING: '열일 중! 집중 모드 ON! 🔥💪',
