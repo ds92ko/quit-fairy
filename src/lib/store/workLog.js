@@ -16,8 +16,8 @@ export const setWorkLog = async ({
   isHalfDay,
   hasLunch,
 }) => {
-  const currentLogs = await electron.store.get('workLog') || [];
-  let newLogs = [...currentLogs];
+  const previousLogs = await electron.store.get('workLog') || [];
+  let updatedLogs = [...previousLogs];
   const newLog = {
     date: formatDate(clockInTime),
     clockInTime: formatTime(clockInTime),
@@ -27,13 +27,13 @@ export const setWorkLog = async ({
     workType: isHalfDay ? (hasLunch ? '반차 (식사 포함) 5시간' : '반차 (식사 제외) 4시간') : '종일 9시간',
   }
 
-  const logIndex = currentLogs.findIndex(log => log.date === newLog.date);
+  const logIndex = previousLogs.findIndex(log => log.date === newLog.date);
 
   if (logIndex >= 0) {
-    newLogs[logIndex] = newLog;
+    updatedLogs[logIndex] = newLog;
   } else {
-    newLogs.unshift(newLog);
+    updatedLogs.unshift(newLog);
   }
 
-  await electron.store.set('workLog', newLogs);
+  await electron.store.set('workLog', updatedLogs);
 }
