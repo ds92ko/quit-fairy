@@ -35,6 +35,37 @@ export function formatTime(date) {
 }
 
 /**
+ * 주어진 날짜 문자열을 파싱하여 24시간제로 변환된 `Date` 객체를 반환합니다.
+ * 
+ * @param {string} dateString - '오전' 또는 '오후'와 시간이 포함된 문자열 (예: '오전 09:30:00', '오후 04:45:00')
+ * @returns {Date} 24시간제로 변환된 `Date` 객체
+ * 
+ * @example
+ * // '오전 09:30:00'을 입력하면, 09:30:00에 해당하는 Date 객체를 반환합니다.
+ * const date = parseTime('오전 09:30:00');
+ * console.log(date); // 결과: 2025-01-08T09:30:00.000Z
+ */
+export function parseTime(dateString) {
+  const [period, time] = dateString.split(' '); // '오전' 또는 '오후'와 시간을 분리
+  const [hours, minutes, seconds] = time.split(':').map(Number); // 시간, 분, 초를 숫자로 변환
+
+  // 현재 날짜를 기준으로 새로운 Date 객체 생성
+  const now = new Date();
+  let hours24 = hours;
+
+  // 오전/오후에 따라 24시간제로 변환
+  if (period === '오후' && hours !== 12) {
+    hours24 += 12;
+  } else if (period === '오전' && hours === 12) {
+    hours24 = 0;
+  }
+
+  // Date 객체에 시간 설정
+  now.setHours(hours24, minutes, seconds, 0);
+  return now;
+}
+
+/**
  * 주어진 밀리초(milliseconds)를 시간, 분, 초로 변환하여 포맷합니다.
  * 
  * @param {number} milliseconds - 변환할 밀리초 값
