@@ -5,6 +5,7 @@
   "private": false,
   "main": "main.js",
   "author": "Dasom Ko <ds92ko@gmail.com>",
+  "type": "module",
   "build": {
     "icon": "public/favicon.png",
     "productName": "Quit Fairy",
@@ -27,14 +28,15 @@
     "electron-pack": "electron-builder"
   },
   "dependencies": {
-    "electron-serve": "^1.1.0"
+    "electron-serve": "^1.1.0",
+    "electron-store": "^10.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^23.0.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "attractions": "^3.7.2",
     "concurrently": "^7.5.0",
-    "electron": "^21.2.0",
+    "electron": "^33.3.1",
     "electron-builder": "^23.6.0",
     "postcss": "^8.4.49",
     "rollup": "^3.2.3",
