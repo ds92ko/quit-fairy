@@ -1,6 +1,5 @@
 <script>
-  import { H2 } from 'attractions';
-  import { FormField, TimePicker, Switch } from 'attractions';
+  import { H2, FormField, TimePicker, Switch } from 'attractions';
 
   export let isHalfDay = false;
   export let hasLunch = false;
