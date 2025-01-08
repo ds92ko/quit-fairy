@@ -1,8 +1,12 @@
 // 애플리케이션 생명 주기 및 기본 브라우저 창을 제어하는 모듈들
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import serve from 'electron-serve';
 import Store from 'electron-store';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const loadURL = serve({ directory: 'public' });
 
@@ -22,12 +26,12 @@ function createWindow() {
     width: 500,
     height: 800,
     webPreferences: {
-      nodeIntegration: true,
-      preload: path.resolve(path.dirname(''), 'preload.js'), // ESM에서는 __dirname 대체
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.resolve(__dirname, 'preload.js'), // ESM에서는 __dirname 대체
       // enableRemoteModule: true,
-      // contextIsolation: false
     },
-    icon: path.resolve(path.dirname(''), 'public/favicon.png'),
+    icon: path.resolve(__dirname, 'public/favicon.png'),
     show: false // 창을 먼저 숨겨두고, 준비되면 보이도록 설정
   });
 
@@ -35,16 +39,16 @@ function createWindow() {
   // 애플리케이션을 패키징할 준비가 되면 이 코드를 삭제하세요.
   if (isDev()) {
     mainWindow.loadURL('http://localhost:8080/'); // 개발 서버 URL 로드
+
+    // 개발자 도구를 열고, Electron 보안 경고를 비활성화합니다.
+    process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
+    mainWindow.webContents.openDevTools();
   } else {
     loadURL(mainWindow); // 패키징된 애플리케이션에서 URL 로드
   }
 
   // 앱이 패키징될 준비가 되면 아래 주석을 해제하고 사용하세요.
   // loadURL(mainWindow);
-
-  // 개발자 도구를 열고, Electron 보안 경고를 비활성화합니다.
-  // process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
-  // mainWindow.webContents.openDevTools();
 
   // 창이 닫힐 때 발생하는 이벤트
   mainWindow.on('closed', () => {
@@ -60,12 +64,14 @@ function createWindow() {
 }
 
 // 데이터 저장/읽기 기능을 위한 IPC 핸들러
-ipcMain.handle('store-get', (event, key) => {
-  return store.get(key); // 특정 key에 대한 값을 반환합니다.
+ipcMain.on('electron-store-get', async (event, val) => {
+  event.returnValue = store.get(val);
 });
-
-ipcMain.handle('store-set', (event, key, value) => {
-  store.set(key, value); // 특정 key에 값을 저장합니다.
+ipcMain.on('electron-store-set', async (event, key, val) => {
+  store.set(key, val);
+});
+ipcMain.on('electron-store-delete', (event, key) => {
+  store.delete(key);  // 해당 키 삭제
 });
 
 // 이 메소드는 Electron이 초기화되고 브라우저 창을 생성할 준비가 되었을 때 호출됩니다.
