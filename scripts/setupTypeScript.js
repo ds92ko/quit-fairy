@@ -15,8 +15,11 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { argv } from 'process';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const projectRoot = argv[2] || path.join(__dirname, '..');
 
 // package.json에 의존성 추가
