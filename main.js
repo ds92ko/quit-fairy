@@ -1,9 +1,10 @@
 // 애플리케이션 생명 주기 및 기본 브라우저 창을 제어하는 모듈들
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, dialog, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import serve from 'electron-serve';
 import Store from 'electron-store';
+import { formatDate, formatTime, formatDuration, parseTime } from './src/lib/utils/format.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -77,6 +78,47 @@ ipcMain.on('electron-store-delete', (event, key) => {
 // 이 메소드는 Electron이 초기화되고 브라우저 창을 생성할 준비가 되었을 때 호출됩니다.
 // 일부 API는 이 이벤트가 발생한 후에만 사용할 수 있습니다.
 app.on('ready', createWindow);
+
+// 창이 닫히기 전에 발생하는 이벤트
+app.on('before-quit', (event) => {
+  const previousLogs = store.get('workLog') || [];
+  const isWorking = previousLogs.find(log => log.workTime === '근무 중');
+
+  if (!isWorking) return;
+
+  event.preventDefault();
+
+  app.focus({ steal: true });
+
+  const confirm = dialog.showMessageBoxSync(mainWindow, {
+    type: 'question',
+    buttons: ['취소', '종료'],
+    title: '칼퇴 요정',
+    message: '😓 아직 근무 중이에요!\n퇴근 시간이 맞는지 확인해보세요 🕔',
+    detail: '앱을 종료하면 자동으로 퇴근 처리가 됩니다 ✨',
+    defaultId: 1,
+    cancelId: 0,
+  });
+
+  if (confirm === 1) {
+    const now = new Date();
+
+    const updatedLogs = previousLogs.map(log => {
+      if (log.date === formatDate(now) && log.workTime === '근무 중') {
+        return {
+          ...log,
+          actualOutTime: formatTime(now),
+          workTime: formatDuration(now - parseTime(log.clockInTime)),
+        };
+      }
+      return log;
+    });
+    
+    store.set('workLog', updatedLogs);
+
+    app.exit(0);
+  }
+});
 
 // 모든 창이 닫힐 때 앱을 종료합니다.
 app.on('window-all-closed', () => {
