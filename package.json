@@ -12,7 +12,8 @@
     "files": [
       "public/**/*",
       "main.js",
-      "preload.js"
+      "preload.js",
+      "src/lib/utils/format.js"
     ],
     "win": {},
     "linux": {},

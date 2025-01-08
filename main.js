@@ -8,7 +8,6 @@ import { formatDate, formatTime, formatDuration, parseTime } from './src/lib/uti
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const loadURL = serve({ directory: 'public' });
 
 // Store 초기화
