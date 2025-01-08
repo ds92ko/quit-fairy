@@ -1,5 +1,5 @@
 // 애플리케이션 생명 주기 및 기본 브라우저 창을 제어하는 모듈들
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import serve from 'electron-serve';
 import Store from 'electron-store';
