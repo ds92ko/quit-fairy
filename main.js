@@ -23,6 +23,7 @@ function isDev() {
 function initializeStore() {
   if (!store.has('setting')) {
     store.set('setting', {
+      autoClockIn: false,
       enableReminder: true,
       enablePreReminder: true,
       reminderTimeUnit: 'minutes',

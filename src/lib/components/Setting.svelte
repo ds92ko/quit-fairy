@@ -1,10 +1,11 @@
 <script>
-  import { Button, Dropdown, FormField, H2, Switch, TextField, DropdownShell } from "attractions";
+  import { Button, Dropdown, FormField, H2, Switch, TextField, DropdownShell, Divider } from "attractions";
   import { onMount } from "svelte";
   import { getSetting } from '../store/setting.js';
   import Loading from './Loading.svelte';
 
   export let settingData = {
+    autoClockIn: false,
     enableReminder: true,
     enablePreReminder: true,
     reminderTimeUnit: 'minutes',
@@ -22,6 +23,21 @@
     loading = false;
   });
 </script>
+<section>
+  <H2>📋 출근 설정</H2>
+  <div class="card">
+    <FormField name="🔄 자동 출근 여부" help="앱을 실행하면 자동으로 출근 처리가 됩니다.">
+      {#if loading}
+        <Loading />
+      {:else}
+        <Switch bind:value={settingData.autoClockIn}>
+          <span class="switch-label">자동 출근 {settingData.autoClockIn ? '켜기' : '끄기'}</span>
+        </Switch>
+      {/if}
+    </FormField>
+  </div>
+</section>
+<Divider />
 <section>
   <H2>🔔 알림 설정</H2>
   <div class="card">

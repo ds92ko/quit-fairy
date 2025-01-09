@@ -4,6 +4,7 @@ export const getSetting = async () => {
 }
 
 export const setSetting = async ({
+  autoClockIn,
   enableReminder,
   enablePreReminder,
   reminderTimeUnit,
@@ -11,6 +12,7 @@ export const setSetting = async ({
 }) => {
   const previousSetting = await electron.store.get('setting');
   const updatedSetting = {
+    autoClockIn: autoClockIn ?? previousSetting.autoClockIn,
     enableReminder: enableReminder ?? previousSetting.enableReminder,
     enablePreReminder: enablePreReminder ?? previousSetting.enablePreReminder,
     reminderTimeUnit : reminderTimeUnit ?? previousSetting.reminderTimeUnit,

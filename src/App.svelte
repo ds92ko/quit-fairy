@@ -18,6 +18,7 @@
   let selectedTab = '근무 설정';
   let logData = [];
   let settingData = {
+    autoClockIn: false,
     enableReminder: true,
     enablePreReminder: true,
     reminderTimeUnit: 'minutes',

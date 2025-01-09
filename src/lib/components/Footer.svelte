@@ -10,6 +10,7 @@
   export let selectedTab = '근무 설정';
   export let logData = [];
   export let settingData = {
+    autoClockIn: false,
     enableReminder: true,
     enablePreReminder: true,
     reminderTimeUnit: 'minutes',
