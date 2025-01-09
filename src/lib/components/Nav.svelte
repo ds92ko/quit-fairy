@@ -4,9 +4,9 @@
   export let clockOutTime;
   export let selectedTab = '근무 설정';
 
-  let items = ['근무 설정', '근무 기록'];
+  let items = ['근무 설정', '근무 기록', '설정'];
   
-  $: items = [clockOutTime ? '근무 상태' : '근무 설정', '근무 기록'];
+  $: items = [clockOutTime ? '근무 상태' : '근무 설정', '근무 기록', '설정'];
 </script>
 
 <div class="nav">
