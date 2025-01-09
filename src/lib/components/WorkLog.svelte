@@ -61,7 +61,7 @@
 
   onMount(async () => {
     logData = await getWorkLog();
-    searchData = [...logData];
+    handleSearch();
     loading = false;
   });
 </script>
@@ -75,7 +75,7 @@
       <div class="search-group">
         <div>
           <Label>⏱️ 근무 유형</Label>
-          <CheckboxChipGroup items={searchType} outline />
+          <CheckboxChipGroup items={searchType} name="type" outline />
         </div>
         <div>
           <Label>📅 근무 기간</Label>
@@ -104,6 +104,7 @@
 
 <style>
   .content {
+    margin-top: 20px;
     overflow-x: auto;
   }
 
