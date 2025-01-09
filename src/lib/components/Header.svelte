@@ -28,6 +28,10 @@
     border-bottom: 1px solid rgba(67, 0, 176, 0.25);
   }
 
+  .container {
+    padding: 0 24px 0 16px;
+  }
+
   .content {
     display: flex;
     justify-content: space-between;
@@ -56,11 +60,5 @@
     display: flex;
     flex-direction: column;
     text-align: right;
-  }
-
-  @media screen and (max-width: 380px) {
-    .content {
-      flex-direction: column;
-    }
   }
 </style>
