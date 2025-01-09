@@ -25,7 +25,7 @@
 <section>
   <H2>🔔 알림 설정</H2>
   <div class="card">
-    <FormField name="퇴근 알림 여부" help="퇴근 시간에 알림을 받습니다.">
+    <FormField name="🏠 퇴근 알림 여부" help="퇴근 시간에 알림을 받습니다.">
       {#if loading}
         <Loading />
       {:else}
@@ -34,7 +34,7 @@
         </Switch>
       {/if}
     </FormField>
-    <FormField name="퇴근 전 알림 여부" help="퇴근 시간 전에 알림을 받습니다.">
+    <FormField name="⚡ 퇴근 전 알림 여부" help="퇴근 시간 전에 알림을 받습니다.">
       {#if loading}
         <Loading />
       {:else}
@@ -44,7 +44,7 @@
       {/if}
     </FormField>
     {#if settingData.enablePreReminder}
-      <FormField name="퇴근 전 알림 시점" help={`퇴근 몇 ${loading ? '분' : settingData.reminderTimeUnit === 'minutes' ? '분' : '시간'} 전에 알림을 받을지 설정합니다.`}>
+      <FormField name="⏲️ 퇴근 전 알림 시점" help={`퇴근 몇 ${loading ? '분' : settingData.reminderTimeUnit === 'minutes' ? '분' : '시간'} 전에 알림을 받을지 설정합니다.`}>
         {#if loading}
           <Loading />
         {:else}
