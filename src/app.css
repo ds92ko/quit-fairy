@@ -74,9 +74,14 @@ footer {
 
 .form-group {
   display: flex;
+  align-items: center;
   column-gap: 6px;
 }
 
 .form-group > * {
   flex: 1;
+}
+
+.form-group > button {
+  flex: 0 1 auto;
 }

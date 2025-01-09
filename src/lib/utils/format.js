@@ -13,7 +13,30 @@ export function formatDate(date) {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const weekday = days[date.getDay()];
+
   return `${year}년 ${month}월 ${day}일 (${weekday})`;
+}
+
+/**
+ * "YYYY년 MM월 DD일 (요일)" 형식의 문자열을 Date 객체로 변환합니다.
+ *
+ * @param {string} dateString - 변환할 날짜 문자열 ("YYYY년 MM월 DD일 (요일)" 형식).
+ * @returns {Date} 변환된 Date 객체.
+ * @example
+ * const dateString = "2025년 01월 06일 (월)";
+ * parseDate(dateString); // Date 객체
+ */
+export function parseDate(dateString) {
+  const regex = /^(\d{4})년 (\d{2})월 (\d{2})일 \((일|월|화|수|목|금|토)\)$/;
+  const match = dateString.match(regex);
+
+  if (!match) {
+    throw new Error('날짜 형식이 올바르지 않습니다.');
+  }
+
+  const [, year, month, day] = match;
+
+  return new Date(`${year}-${month}-${day}T00:00:00Z`);
 }
 
 /**
@@ -31,6 +54,7 @@ export function formatTime(date) {
   const minutes = date.getMinutes();
   const seconds = date.getSeconds();
   const period = hours24 >= 12 ? '오후' : '오전';
+
   return `${period} ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
@@ -46,21 +70,18 @@ export function formatTime(date) {
  * console.log(date); // 결과: 2025-01-08T09:30:00.000Z
  */
 export function parseTime(dateString) {
-  const [period, time] = dateString.split(' '); // '오전' 또는 '오후'와 시간을 분리
-  const [hours, minutes, seconds] = time.split(':').map(Number); // 시간, 분, 초를 숫자로 변환
+  const [period, time] = dateString.split(' ');
+  const [hours, minutes, seconds] = time.split(':').map(Number);
 
-  // 현재 날짜를 기준으로 새로운 Date 객체 생성
   const now = new Date();
   let hours24 = hours;
 
-  // 오전/오후에 따라 24시간제로 변환
   if (period === '오후' && hours !== 12) {
     hours24 += 12;
   } else if (period === '오전' && hours === 12) {
     hours24 = 0;
   }
 
-  // Date 객체에 시간 설정
   now.setHours(hours24, minutes, seconds, 0);
   return now;
 }
