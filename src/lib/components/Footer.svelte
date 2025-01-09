@@ -61,7 +61,7 @@
 
   const setDisabled = async () => disabled = logData.length === 0;
 
-  $: logData, setDisabled();
+  $: setDisabled();
 </script>
 
 <footer class="footer">
