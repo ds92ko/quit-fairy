@@ -1,8 +1,9 @@
 <script>
   import { onMount } from 'svelte';
-  import { H2, Table, Loading } from 'attractions';
+  import { H2, Table } from 'attractions';
   import { getWorkLog } from '../store/workLog.js';
-
+  import Loading from './Loading.svelte';
+  
   export let logData = [];
 
   let loading = true;
@@ -25,10 +26,7 @@
   <H2>📝 근무 기록</H2>
   <div class="content">
     {#if loading}
-      <div class="loading">
-        <Loading />
-        <p>잠시만 기다려주세요... ⏳✨</p>
-      </div>
+      <Loading />
     {:else}
       {#if logData.length === 0}
         <div class="card">
@@ -46,15 +44,6 @@
 <style>
   .content {
     overflow-x: auto;
-  }
-
-  .loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    padding-block: 50px;
-    text-align: center;
   }
 
   .table {
