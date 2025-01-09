@@ -7,15 +7,100 @@
   import WorkStatus from './lib/components/WorkStatus.svelte';
   import Nav from './lib/components/Nav.svelte';
   import WorkLog from './lib/components/WorkLog.svelte';
+  import Setting from './lib/components/Setting.svelte';
+  import { onDestroy, onMount } from 'svelte';
 
   let currentTime = new Date();
   let isHalfDay = false;
   let hasLunch = false;
   let clockInTime;
   let clockOutTime;
-  let notification = { message: '', onlyToast: false };
   let selectedTab = '근무 설정';
   let logData = [];
+  let settingData = {
+    enableReminder: true,
+    enablePreReminder: true,
+    reminderTimeUnit: 'minutes',
+    reminderTime: 10
+  }
+  let notification = {
+    message: '',
+    enableSystemNotification: true,
+  };
+  let notificationTimeout;
+  let reminderTimeout;
+  let preReminderTimeout;
+
+  const requestNotificationPermission = async () => {
+    if (Notification.permission !== 'granted') {
+      await Notification.requestPermission();
+    }
+  }
+
+  const setNotification = ({ message, enableSystemNotification }) => {
+    if (notificationTimeout) {
+      clearTimeout(notificationTimeout);
+    }
+
+    notification = { 
+      message, 
+      enableSystemNotification
+    };
+
+    if (enableSystemNotification) {
+      requestNotificationPermission().then(() => {
+        new Notification('칼퇴 요정', { body: message });
+      });
+    }
+
+    notificationTimeout = setTimeout(() => {
+      notification = { message: '', enableSystemNotification: true };
+    }, 2000);
+  }
+
+  const scheduleNotifications = () => {
+    if (!clockOutTime) return;
+
+    const now = new Date();
+    const timeToClockOut = clockOutTime - now;
+
+    if (reminderTimeout) clearTimeout(reminderTimeout);
+    if (preReminderTimeout) clearTimeout(preReminderTimeout);
+    
+    if (settingData.enableReminder) {
+      if (timeToClockOut > 0) {
+        reminderTimeout = setTimeout(() => {
+          setNotification({ message: '퇴근 시간이 되었어요! 😊', enableSystemNotification: true });
+        }, timeToClockOut);
+      }
+    }
+
+    if (settingData.enablePreReminder) {
+      const reminderTime = settingData.reminderTime * (settingData.reminderTimeUnit === 'minutes' ? 60000 : 3600000);
+      const timeToReminder = timeToClockOut - reminderTime;
+
+      if (timeToReminder > 0) {
+        preReminderTimeout = setTimeout(() => {
+          setNotification({ 
+            message: `퇴근 ${settingData.reminderTime}${settingData.reminderTimeUnit === 'minutes' ? '분' : '시간'} 전입니다! 마무리 작업을 시작하세요 😊`, 
+            enableSystemNotification: true 
+          });
+        }, timeToReminder);
+      }
+    }
+  };
+
+  $: clockOutTime, settingData, scheduleNotifications();
+
+  onMount(() => {
+    scheduleNotifications();
+  });
+
+  onDestroy(() => {
+    if (notificationTimeout) {
+      clearTimeout(notificationTimeout);
+    }
+  });
 </script>
 
 <Header bind:currentTime />
@@ -25,15 +110,19 @@
     <WorkStatus {clockOutTime} />
     <Nav {clockOutTime} bind:selectedTab />
     {#if selectedTab === '근무 상태'}
-      <WorkTracker {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} bind:notification />
+      <WorkTracker {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} />
     {:else if selectedTab === '근무 설정'}
       <WorkSetup bind:isHalfDay bind:hasLunch bind:clockInTime />
     {:else if selectedTab === '근무 기록'}
       <WorkLog bind:logData />
+    {:else if selectedTab === '설정'}
+      <Setting bind:settingData />
     {/if}
   </div>
 </main>
 
-<Toast {notification} />
+{#if notification.message}
+  <Toast message={notification.message} />
+{/if}
 
-<Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:notification bind:selectedTab bind:logData />
+<Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:selectedTab bind:logData bind:settingData {setNotification} />

@@ -1,14 +1,21 @@
 <script>
   import { Button, Modal, Dialog } from 'attractions';
   import { deleteWorkLog, setWorkLog, getWorkLog } from '../store/workLog.js';
+  import { setSetting } from '../store/setting.js';
 
   export let isHalfDay = false;
   export let hasLunch = false;
   export let clockInTime = new Date();
   export let clockOutTime;
-  export let notification = { message: '', onlyToast: false };
   export let selectedTab = '근무 설정';
   export let logData = [];
+  export let settingData = {
+    enableReminder: true,
+    enablePreReminder: true,
+    reminderTimeUnit: 'minutes',
+    reminderTime: 10
+  };
+  export let setNotification;
 
   let disabled = true;
   let modalOpen = false;
@@ -28,7 +35,7 @@
       clockInTime = new Date();
       clockOutTime = null;
       selectedTab = '근무 설정';
-      notification = { message: '퇴근했습니다! 오늘도 수고하셨습니다 😚' };
+      setNotification({ message: '퇴근했습니다! 오늘도 수고하셨습니다 😚', enableSystemNotification: true });
     } else {
       const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
       const outTime = new Date(clockInTime);
@@ -44,7 +51,7 @@
 
       clockOutTime = outTime;
       selectedTab = '근무 상태';
-      notification = { message: '출근했습니다! 오늘도 화이팅하세요 💪' };
+      setNotification({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
     }
   }
 
@@ -54,14 +61,17 @@
 
   const handleDeleteWorkLog = async () => {
     await deleteWorkLog();
-    logData = await getWorkLog();
-    notification = { message: '근무 기록을 모두 삭제했습니다! 🗑️', onlyToast: true};
+    logData = [...await getWorkLog()];
+    setNotification({ message: '근무 기록을 모두 삭제했습니다! 🗑️', enableSystemNotification: false});
     handleCloseModal();
   }
 
-  const setDisabled = async () => disabled = logData.length === 0;
-
-  $: setDisabled();
+  const handleSetSetting = () => {
+    setSetting(settingData);
+    setNotification({ message: '설정을 저장했습니다! 🎉', enableSystemNotification: false });
+  }
+  
+  $: disabled = logData.length === 0;
 </script>
 
 <footer class="footer">
@@ -69,6 +79,8 @@
     <div class="content">
       {#if selectedTab === '근무 기록'}
         <Button filled on:click={handleOpenModal} disabled={disabled}>전체삭제</Button>
+      {:else if selectedTab === '설정'}
+        <Button filled on:click={handleSetSetting}>저장하기</Button>
       {:else}
         <Button filled on:click={handleSetWorkLog}>{clockOutTime ? '퇴근' : '출근'}하기</Button>
       {/if}
@@ -81,7 +93,7 @@
     <div slot="title-icon">⚠️</div>
     <p>근무 기록을 모두 삭제할까요?</p>
     <p>삭제된 데이터는 다시 복구할 수 없습니다!</p>
-    <div class="modal-button">
+    <div class="button-group modal-button">
       <Button outline on:click={handleCloseModal}>취소</Button>
       <Button danger outline on:click={handleDeleteWorkLog}>삭제</Button>
     </div>
@@ -101,9 +113,6 @@
   }
 
   .modal-button {
-    display: flex;
-    justify-content: flex-end;
-    column-gap: 12px;
     margin-top: 20px;
   }
 </style>
