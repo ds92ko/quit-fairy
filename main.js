@@ -20,6 +20,20 @@ function isDev() {
   return !app.isPackaged; // 개발 모드인지 확인하는 함수
 }
 
+function initializeStore() {
+  if (!store.has('setting')) {
+    store.set('setting', {
+      enableReminder: true,
+      enablePreReminder: true,
+      reminderTimeUnit: 'minutes',
+      reminderTime: 10
+    })
+  }
+  if (!store.has('workLog')) {
+    store.set('workLog', []);
+  }
+}
+
 function createWindow() {
   // 브라우저 창을 생성합니다.
   mainWindow = new BrowserWindow({
@@ -76,7 +90,10 @@ ipcMain.on('electron-store-delete', (event, key) => {
 
 // 이 메소드는 Electron이 초기화되고 브라우저 창을 생성할 준비가 되었을 때 호출됩니다.
 // 일부 API는 이 이벤트가 발생한 후에만 사용할 수 있습니다.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  initializeStore();
+  createWindow();
+});
 
 // 창이 닫히기 전에 발생하는 이벤트
 app.on('before-quit', (event) => {
