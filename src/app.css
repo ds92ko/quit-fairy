@@ -49,3 +49,34 @@ footer {
   border: 1px solid rgba(67, 0, 176, 0.25);
   border-radius: 16px;
 }
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  column-gap: 12px;
+}
+
+.switch-label {
+  margin-left: 12px;
+}
+
+.radio-button {
+  margin-bottom: 12px;
+}
+
+.dropdown-options {
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+  padding: 6px;
+}
+
+.form-group {
+  display: flex;
+  column-gap: 6px;
+}
+
+.form-group > * {
+  flex: 1;
+}
