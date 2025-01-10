@@ -1,4 +1,4 @@
-import { formatDate, formatTime, formatDuration } from '../utils/format.js';
+import { formatDate, formatTime, formatDuration } from '../../utils/format.js';
 
 export const getWorkLog = async () => {
   const workLog = await electron.store.get('workLog');

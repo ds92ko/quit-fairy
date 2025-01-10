@@ -9,8 +9,8 @@
   import WorkLog from './lib/components/WorkLog.svelte';
   import Setting from './lib/components/Setting.svelte';
   import { onDestroy, onMount } from 'svelte';
-  import { setWorkLog } from './lib/store/workLog';
-  import { getSetting } from './lib/store/setting';
+  import { setWorkLog } from './lib/stores/electron/workLog';
+  import { getSetting } from './lib/stores/electron/setting';
 
   let currentTime = new Date();
   let isHalfDay = false;

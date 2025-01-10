@@ -1,7 +1,7 @@
 <script>
   import { Button, Dropdown, FormField, H2, Switch, TextField, DropdownShell, Divider } from "attractions";
   import { onMount } from "svelte";
-  import { getSetting } from '../store/setting.js';
+  import { getSetting } from '../stores/electron/setting.js';
   import Loading from './Loading.svelte';
 
   export let settingData = {
