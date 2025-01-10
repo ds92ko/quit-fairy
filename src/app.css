@@ -39,6 +39,10 @@ footer {
   z-index: 100;
 }
 
+strong {
+  font-weight: 500;
+}
+
 .container {
   padding-inline: 24px;
 }

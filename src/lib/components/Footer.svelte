@@ -92,8 +92,9 @@
 <Modal bind:open={modalOpen} let:closeCallback>
   <Dialog title="근무 기록 전체 삭제" danger {closeCallback}>
     <div slot="title-icon">⚠️</div>
-    <p>근무 기록을 모두 삭제할까요?</p>
+    <p>현재 검색된 기록뿐만 아니라, <strong>모든 근무 기록이 삭제됩니다</strong></p>
     <p>삭제된 데이터는 다시 복구할 수 없습니다!</p>
+    <p>근무 기록을 모두 삭제할까요?</p>
     <div class="button-group modal-button">
       <Button outline on:click={handleCloseModal}>취소</Button>
       <Button danger outline on:click={handleDeleteWorkLog}>삭제</Button>
