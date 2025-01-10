@@ -1,16 +1,16 @@
 <script>
-  import Header from './lib/components/Header.svelte';
-  import WorkSetup from './lib/components/WorkSetup.svelte';
-  import WorkTracker from './lib/components/WorkTracker.svelte';
-  import Toast from './lib/components/Toast.svelte';
-  import Footer from './lib/components/Footer.svelte';
-  import WorkStatus from './lib/components/WorkStatus.svelte';
-  import Nav from './lib/components/Nav.svelte';
-  import WorkLog from './lib/components/WorkLog.svelte';
-  import Setting from './lib/components/Setting.svelte';
   import { onDestroy, onMount } from 'svelte';
-  import { setWorkLog } from './lib/stores/electron/workLog';
-  import { getSetting } from './lib/stores/electron/setting';
+  import { getSetting } from '@/stores/electron/setting';
+  import { setWorkLog } from '@/stores/electron/workLog';
+  import Header from '@/components/Header.svelte';
+  import WorkSetup from '@/components/WorkSetup.svelte';
+  import WorkTracker from '@/components/WorkTracker.svelte';
+  import Toast from '@/components/Toast.svelte';
+  import Footer from '@/components/Footer.svelte';
+  import WorkStatus from '@/components/WorkStatus.svelte';
+  import Nav from '@/components/Nav.svelte';
+  import WorkLog from '@/components/WorkLog.svelte';
+  import Setting from '@/components/Setting.svelte';
 
   let currentTime = new Date();
   let isHalfDay = false;

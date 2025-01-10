@@ -1,4 +1,6 @@
+import path from 'path';
 import svelte from 'rollup-plugin-svelte';
+import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
@@ -47,6 +49,13 @@ export default {
 				dev: !production
 			},
 		}),
+
+		alias({
+      entries: [
+        { find: '@', replacement: path.resolve(__dirname, 'src/lib') } // '@'를 'src' 디렉토리로 설정
+      ]
+    }),
+
 		// 컴포넌트의 CSS를 별도의 파일로 추출합니다.
 		// 성능을 향상시키기 위해 별도의 파일로 분리합니다.
 		css({ output: 'bundle.css' }),

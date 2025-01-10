@@ -1,7 +1,7 @@
 <script>
   import { Button, Modal, Dialog } from 'attractions';
-  import { deleteWorkLog, setWorkLog, getWorkLog } from '../stores/electron/workLog.js';
-  import { setSetting } from '../stores/electron/setting.js';
+  import { setSetting } from '@/stores/electron/setting.js';
+  import { deleteWorkLog, setWorkLog, getWorkLog } from '@/stores/electron/workLog.js';
 
   export let isHalfDay = false;
   export let hasLunch = false;
