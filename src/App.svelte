@@ -9,6 +9,8 @@
   import WorkLog from './lib/components/WorkLog.svelte';
   import Setting from './lib/components/Setting.svelte';
   import { onDestroy, onMount } from 'svelte';
+  import { setWorkLog } from './lib/store/workLog';
+  import { getSetting } from './lib/store/setting';
 
   let currentTime = new Date();
   let isHalfDay = false;
@@ -59,6 +61,30 @@
     }, 2000);
   }
 
+  const setAutoClockIn = async () => {
+    settingData = await getSetting();
+    
+    if (settingData.autoClockIn) {
+      const now = new Date();
+      const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
+      const outTime = new Date(now);
+
+      outTime.setHours(outTime.getHours() + workHours);
+
+      setWorkLog({
+        clockInTime: now,
+        scheduledOutTime: outTime,
+        isHalfDay,
+        hasLunch,
+      });
+
+      clockInTime = now;
+      clockOutTime = outTime;
+      selectedTab = '근무 상태';
+      setNotification({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
+    }
+  };
+
   const scheduleNotifications = () => {
     if (!clockOutTime) return;
 
@@ -95,6 +121,7 @@
 
   onMount(() => {
     scheduleNotifications();
+    setAutoClockIn();
   });
 
   onDestroy(() => {

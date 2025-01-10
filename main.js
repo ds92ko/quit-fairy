@@ -60,7 +60,7 @@ function createWindow() {
 
     // 개발자 도구를 열고, Electron 보안 경고를 비활성화합니다.
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
-    // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
   } else {
     loadURL(mainWindow); // 패키징된 애플리케이션에서 URL 로드
   }
