@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { Button, Dropdown, FormField, H2, Switch, TextField, DropdownShell, Divider } from "attractions";
   import { getSetting } from '@/stores/electron/setting.js';
-  import Loading from '@/components/Loading.svelte';
+  import Loading from '@/components/common/Loading.svelte';
 
   export let settingData = {
     autoClockIn: false,

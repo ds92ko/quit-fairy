@@ -1,16 +1,20 @@
 <script>
   import { onDestroy, onMount } from 'svelte';
+
   import { getSetting } from '@/stores/electron/setting';
   import { setWorkLog } from '@/stores/electron/workLog';
-  import Header from '@/components/Header.svelte';
-  import WorkSetup from '@/components/WorkSetup.svelte';
-  import WorkTracker from '@/components/WorkTracker.svelte';
-  import Toast from '@/components/Toast.svelte';
-  import Footer from '@/components/Footer.svelte';
-  import WorkStatus from '@/components/WorkStatus.svelte';
-  import Nav from '@/components/Nav.svelte';
-  import WorkLog from '@/components/WorkLog.svelte';
-  import Setting from '@/components/Setting.svelte';
+
+  import Header from '@/components/layouts/Header.svelte';
+  import Nav from '@/components/layouts/Nav.svelte';
+  import WorkStatus from '@/components/layouts/WorkStatus.svelte';
+  import Footer from '@/components/layouts/Footer.svelte';
+  
+  import WorkSetup from '@/routes/WorkSetup.svelte';
+  import WorkTracker from '@/routes/WorkTracker.svelte';
+  import WorkLogs from '@/routes/WorkLogs.svelte';
+  import Settings from '@/routes/Settings.svelte';
+
+  import Toast from '@/components/common/Toast.svelte';
 
   let currentTime = new Date();
   let isHalfDay = false;
@@ -142,9 +146,9 @@
     {:else if selectedTab === '근무 설정'}
       <WorkSetup bind:isHalfDay bind:hasLunch bind:clockInTime />
     {:else if selectedTab === '근무 기록'}
-      <WorkLog bind:logData />
+      <WorkLogs bind:logData />
     {:else if selectedTab === '설정'}
-      <Setting bind:settingData />
+      <Settings bind:settingData />
     {/if}
   </div>
 </main>

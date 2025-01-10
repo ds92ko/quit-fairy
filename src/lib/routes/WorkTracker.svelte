@@ -1,7 +1,7 @@
 <script>
   import { H2, H3, Divider, FormField } from 'attractions';
   import { formatDate, formatTime, formatDuration } from '@/utils/format.js';
-  import CircleProgressBar from '@/components/CircleProgressBar.svelte';
+  import CircleProgressBar from '@/components/routes/work-tracker/CircleProgressBar.svelte';
 
   export let isHalfDay = false;
   export let hasLunch = false;
