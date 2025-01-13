@@ -15,6 +15,7 @@
   import Settings from '@/routes/Settings.svelte';
 
   import Toast from '@/components/common/Toast.svelte';
+  import Modal from '@/components/common/Modal.svelte';
 
   let currentTime = new Date();
   let isHalfDay = false;
@@ -37,6 +38,22 @@
   let notificationTimeout;
   let reminderTimeout;
   let preReminderTimeout;
+  let modal = {
+    open: false,
+    title: {
+      icon: '',
+      text: ''
+    },
+    contents: [],
+    confirm: {
+      label: '확인',
+      callback: () => {}
+    },
+    cancel: {
+      label: '취소',
+      callback: () => {}
+    },
+  }
 
   const requestNotificationPermission = async () => {
     if (Notification.permission !== 'granted') {
@@ -157,4 +174,5 @@
   <Toast message={notification.message} />
 {/if}
 
-<Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:selectedTab bind:logData bind:settingData {setNotification} />
+<Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:selectedTab bind:logData bind:settingData bind:modal {setNotification} />
+<Modal bind:modal />

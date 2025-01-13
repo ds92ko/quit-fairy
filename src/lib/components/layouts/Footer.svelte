@@ -1,7 +1,8 @@
 <script>
-  import { Button, Modal, Dialog } from 'attractions';
+  import { Button } from 'attractions';
   import { setSetting } from '@/stores/electron/setting.js';
   import { deleteWorkLog, setWorkLog, getWorkLog } from '@/stores/electron/workLog.js';
+  import App from '../../../App.svelte';
 
   export let isHalfDay = false;
   export let hasLunch = false;
@@ -17,9 +18,24 @@
     reminderTime: 10
   };
   export let setNotification;
+  export let modal = {
+    open: false,
+    title: {
+      icon: '',
+      text: ''
+    },
+    contents: [],
+    confirm: {
+      label: '확인',
+      callback: () => {}
+    },
+    cancel: {
+      label: '취소',
+      callback: () => {}
+    },
+  }
 
   let disabled = true;
-  let modalOpen = false;
 
   const handleSetWorkLog = () => {
     if (clockOutTime) {
@@ -56,21 +72,35 @@
     }
   }
 
-  const handleOpenModal = () => modalOpen = true;
-
-  const handleCloseModal = () => modalOpen = false;
-
-  const handleDeleteWorkLog = async () => {
-    await deleteWorkLog();
-    logData = [...await getWorkLog()];
-    setNotification({ message: '근무 기록을 모두 삭제했습니다! 🗑️', enableSystemNotification: false});
-    handleCloseModal();
+  const handleDeleteWorkLogs = () => {
+    modal = {
+      open: true,
+      title: {
+        icon: '⚠️',
+        text: '근무 기록 전체 삭제'
+      },
+      contents: [
+        '현재 검색된 기록뿐만 아니라, 모든 근무 기록이 삭제됩니다',
+        '삭제된 데이터는 다시 복구할 수 없습니다!',
+        '근무 기록을 모두 삭제할까요?'
+      ],
+      confirm: {
+        label: '삭제',
+        callback: async () => {
+          await deleteWorkLog();
+          logData = [...await getWorkLog()];
+          setNotification({ message: '근무 기록을 모두 삭제했습니다! 🗑️', enableSystemNotification: false});
+        }
+      },
+    }
   }
 
   const handleSetSetting = () => {
     setSetting(settingData);
     setNotification({ message: '설정을 저장했습니다! 🎉', enableSystemNotification: false });
   }
+
+  $: modal, console.log(modal);
   
   $: disabled = logData.length === 0;
 </script>
@@ -79,7 +109,7 @@
   <div class="container">
     <div class="content">
       {#if selectedTab === '근무 기록'}
-        <Button filled on:click={handleOpenModal} disabled={disabled}>전체삭제</Button>
+        <Button filled on:click={handleDeleteWorkLogs} disabled={disabled}>전체삭제</Button>
       {:else if selectedTab === '설정'}
         <Button filled on:click={handleSetSetting}>저장하기</Button>
       {:else}
@@ -88,19 +118,6 @@
     </div>
   </div>
 </footer>
-
-<Modal bind:open={modalOpen} let:closeCallback>
-  <Dialog title="근무 기록 전체 삭제" danger {closeCallback}>
-    <div slot="title-icon">⚠️</div>
-    <p>현재 검색된 기록뿐만 아니라, <strong>모든 근무 기록이 삭제됩니다</strong></p>
-    <p>삭제된 데이터는 다시 복구할 수 없습니다!</p>
-    <p>근무 기록을 모두 삭제할까요?</p>
-    <div class="button-group modal-button">
-      <Button outline on:click={handleCloseModal}>취소</Button>
-      <Button danger outline on:click={handleDeleteWorkLog}>삭제</Button>
-    </div>
-  </Dialog>
-</Modal>
 
 <style>
   .footer {
@@ -112,9 +129,5 @@
   .content {
     display: flex;
     justify-content: flex-end;
-  }
-
-  .modal-button {
-    margin-top: 20px;
   }
 </style>
