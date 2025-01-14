@@ -1,17 +1,22 @@
 <script>
   import { Tabs } from 'attractions';
 
-  export let clockOutTime;
-  export let selectedTab = '근무 설정';
+  import { tab } from '@/stores/svelte/tab';
 
-  let items = ['근무 설정', '근무 기록', '설정'];
-  
-  $: items = [clockOutTime ? '근무 상태' : '근무 설정', '근무 기록', '설정'];
+  export let clockOutTime;
+
+  $: clockOutTime, tab.update(current => ({
+    ...current,
+    items: current.items.map((item, index) => {
+      if (index === 0) return clockOutTime ? '근무 상태' : '근무 설정';
+      return item;
+    })
+  }))
 </script>
 
 <div class="nav">
   <div class="menu">
-    <Tabs name="menu" {items} bind:value={selectedTab} />
+    <Tabs name="menu" items={$tab.items} bind:value={$tab.current} />
   </div>
 </div>
 

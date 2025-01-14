@@ -1,15 +1,16 @@
 <script>
   import { Button } from 'attractions';
-  import { setSetting } from '@/stores/electron/setting.js';
-  import { deleteWorkLog, setWorkLog, getWorkLog } from '@/stores/electron/workLog.js';
-  import { modal } from '@/stores/svelte/modal.js';
+  
+  import { setSetting } from '@/stores/electron/setting';
+  import { deleteWorkLog, setWorkLog, getWorkLog } from '@/stores/electron/workLog';
+  import { modal } from '@/stores/svelte/modal';
   import { notification } from '@/stores/svelte/notification';
+  import { tab } from '@/stores/svelte/tab';
 
   export let isHalfDay = false;
   export let hasLunch = false;
   export let clockInTime = new Date();
   export let clockOutTime;
-  export let selectedTab = '근무 설정';
   export let logData = [];
   export let settingData = {
     autoClockIn: false,
@@ -35,7 +36,7 @@
       hasLunch = false;
       clockInTime = new Date();
       clockOutTime = null;
-      selectedTab = '근무 설정';
+      tab.update(current => ({ ...current, current: '근무 설정' }));
       notification.set({ message: '퇴근했습니다! 오늘도 수고하셨습니다 😚', enableSystemNotification: true });
     } else {
       const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
@@ -51,7 +52,7 @@
       });
 
       clockOutTime = outTime;
-      selectedTab = '근무 상태';
+      tab.update(current => ({ ...current, current: '근무 상태' }));
       notification.set({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
     }
   }
@@ -91,9 +92,9 @@
 <footer class="footer">
   <div class="container">
     <div class="content">
-      {#if selectedTab === '근무 기록'}
+      {#if $tab.current === '근무 기록'}
         <Button filled on:click={handleDeleteWorkLogs} disabled={disabled}>전체삭제</Button>
-      {:else if selectedTab === '설정'}
+      {:else if $tab.current === '설정'}
         <Button filled on:click={handleSetSetting}>저장하기</Button>
       {:else}
         <Button filled on:click={handleSetWorkLog}>{clockOutTime ? '퇴근' : '출근'}하기</Button>

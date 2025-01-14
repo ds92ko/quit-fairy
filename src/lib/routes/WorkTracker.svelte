@@ -1,6 +1,8 @@
 <script>
   import { H2, H3, Divider, FormField } from 'attractions';
-  import { formatDate, formatTime, formatDuration } from '@/utils/format.js';
+
+  import { formatDate, formatTime, formatDuration } from '@/utils/format';
+  
   import CircleProgressBar from '@/components/routes/work-tracker/CircleProgressBar.svelte';
 
   export let isHalfDay = false;

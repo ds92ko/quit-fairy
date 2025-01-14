@@ -1,5 +1,5 @@
 <script>
-  import { formatDate, formatTime } from '@/utils/format.js';
+  import { formatDate, formatTime } from '@/utils/format';
   
   export let currentTime = new Date();
 

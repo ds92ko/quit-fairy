@@ -1,8 +1,11 @@
 <script>
   import { onMount } from 'svelte';
+
   import { CheckboxChipGroup, H2, Table, DatePicker, Button, Label, Divider } from 'attractions';
-  import { parseDate } from '@/utils/format.js';
-  import { getWorkLog } from '@/stores/electron/workLog.js';
+
+  import { parseDate } from '@/utils/format';
+  import { getWorkLog } from '@/stores/electron/workLog';
+  
   import Loading from '@/components/common/Loading.svelte';
   
   export let logData = [];

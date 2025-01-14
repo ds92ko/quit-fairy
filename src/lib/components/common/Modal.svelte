@@ -1,6 +1,7 @@
 <script>
   import { Modal, Dialog, Button } from 'attractions';
-  import { modal } from '@/stores/svelte/modal.js';
+  
+  import { modal } from '@/stores/svelte/modal';
 
   const initialModal = {
     open: false,

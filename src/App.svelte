@@ -4,6 +4,7 @@
   import { getSetting } from '@/stores/electron/setting';
   import { setWorkLog } from '@/stores/electron/workLog';
   import { notification } from '@/stores/svelte/notification';
+  import { tab } from '@/stores/svelte/tab';
 
   import Header from '@/components/layouts/Header.svelte';
   import Nav from '@/components/layouts/Nav.svelte';
@@ -23,7 +24,6 @@
   let hasLunch = false;
   let clockInTime;
   let clockOutTime;
-  let selectedTab = '근무 설정';
   let logData = [];
   let settingData = {
     autoClockIn: false,
@@ -54,7 +54,7 @@
 
       clockInTime = now;
       clockOutTime = outTime;
-      selectedTab = '근무 상태';
+      tab.update(current => ({ ...current, current: '근무 상태' }));
       notification.set({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
     }
   };
@@ -113,19 +113,19 @@
 <main>
   <div class="container">
     <WorkStatus {clockOutTime} />
-    <Nav {clockOutTime} bind:selectedTab />
-    {#if selectedTab === '근무 상태'}
+    <Nav {clockOutTime} />
+    {#if $tab.current === '근무 상태'}
       <WorkTracker {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} />
-    {:else if selectedTab === '근무 설정'}
+    {:else if $tab.current === '근무 설정'}
       <WorkSetup bind:isHalfDay bind:hasLunch bind:clockInTime />
-    {:else if selectedTab === '근무 기록'}
+    {:else if $tab.current === '근무 기록'}
       <WorkLogs bind:logData />
-    {:else if selectedTab === '설정'}
+    {:else if $tab.current === '설정'}
       <Settings bind:settingData />
     {/if}
   </div>
 </main>
 
 <Toast />
-<Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:selectedTab bind:logData bind:settingData />
+<Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:logData bind:settingData />
 <Modal />

@@ -1,5 +1,6 @@
 <script>
   import { Snackbar } from 'attractions';
+  
   import { notification } from '@/stores/svelte/notification';
 </script>
 
