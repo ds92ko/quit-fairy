@@ -64,6 +64,8 @@
     handleSearch();
     loading = false;
   });
+
+  $: logData, handleSearch();
 </script>
 
 <section>

@@ -2,7 +2,7 @@
   import { Button } from 'attractions';
   import { setSetting } from '@/stores/electron/setting.js';
   import { deleteWorkLog, setWorkLog, getWorkLog } from '@/stores/electron/workLog.js';
-  import App from '../../../App.svelte';
+  import { modal } from '@/stores/svelte/modal.js';
 
   export let isHalfDay = false;
   export let hasLunch = false;
@@ -18,22 +18,6 @@
     reminderTime: 10
   };
   export let setNotification;
-  export let modal = {
-    open: false,
-    title: {
-      icon: '',
-      text: ''
-    },
-    contents: [],
-    confirm: {
-      label: '확인',
-      callback: () => {}
-    },
-    cancel: {
-      label: '취소',
-      callback: () => {}
-    },
-  }
 
   let disabled = true;
 
@@ -73,7 +57,8 @@
   }
 
   const handleDeleteWorkLogs = () => {
-    modal = {
+    modal.update(current => ({
+      ...current,
       open: true,
       title: {
         icon: '⚠️',
@@ -92,7 +77,7 @@
           setNotification({ message: '근무 기록을 모두 삭제했습니다! 🗑️', enableSystemNotification: false});
         }
       },
-    }
+    }))
   }
 
   const handleSetSetting = () => {
@@ -100,8 +85,6 @@
     setNotification({ message: '설정을 저장했습니다! 🎉', enableSystemNotification: false });
   }
 
-  $: modal, console.log(modal);
-  
   $: disabled = logData.length === 0;
 </script>
 
