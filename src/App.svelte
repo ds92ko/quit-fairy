@@ -99,8 +99,11 @@
   });
 
   onDestroy(() => {
-    if (notificationTimeout) {
-      clearTimeout(notificationTimeout);
+    if (reminderTimeout) {
+      clearTimeout(reminderTimeout);
+    }
+    if (preReminderTimeout) {
+      clearTimeout(preReminderTimeout);
     }
   });
 </script>
