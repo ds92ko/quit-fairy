@@ -1,7 +1,7 @@
 <script>
   import { onDestroy, onMount } from 'svelte';
 
-  import { getSetting } from '@/stores/electron/setting';
+  import { initialSetting, getSetting } from '@/stores/electron/setting';
   import { setWorkLog } from '@/stores/electron/workLog';
   
   import { notification } from '@/stores/svelte/notification';
@@ -22,13 +22,7 @@
   import Modal from '@/components/common/Modal.svelte';
 
   let logData = [];
-  let settingData = {
-    autoClockIn: false,
-    enableReminder: true,
-    enablePreReminder: true,
-    reminderTimeUnit: 'minutes',
-    reminderTime: 10
-  }
+  let settingData = { ...initialSetting };
   let reminderTimeout;
   let preReminderTimeout;
 

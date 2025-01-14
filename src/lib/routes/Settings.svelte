@@ -3,17 +3,11 @@
 
   import { Button, Dropdown, FormField, H2, Switch, TextField, DropdownShell, Divider } from "attractions";
 
-  import { getSetting } from '@/stores/electron/setting';
+  import { initialSetting, getSetting } from '@/stores/electron/setting';
   
   import Loading from '@/components/common/Loading.svelte';
 
-  export let settingData = {
-    autoClockIn: false,
-    enableReminder: true,
-    enablePreReminder: true,
-    reminderTimeUnit: 'minutes',
-    reminderTime: 10
-  };
+  export let settingData = { ...initialSetting };
   
   let loading = true;
   const timeUnits = [

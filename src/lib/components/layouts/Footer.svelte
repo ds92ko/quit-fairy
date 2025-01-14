@@ -1,22 +1,16 @@
 <script>
   import { Button } from 'attractions';
   
-  import { setSetting } from '@/stores/electron/setting';
+  import { initialSetting, setSetting } from '@/stores/electron/setting';
   import { deleteWorkLog, setWorkLog, getWorkLog } from '@/stores/electron/workLog';
-  
+
   import { modal } from '@/stores/svelte/modal';
   import { notification } from '@/stores/svelte/notification';
   import { tab } from '@/stores/svelte/tab';
   import { workStatus } from '@/stores/svelte/workStatus';
 
   export let logData = [];
-  export let settingData = {
-    autoClockIn: false,
-    enableReminder: true,
-    enablePreReminder: true,
-    reminderTimeUnit: 'minutes',
-    reminderTime: 10
-  };
+  export let settingData = { ...initialSetting };
 
   let disabled = true;
 

@@ -1,3 +1,11 @@
+export const initialSetting = {
+  autoClockIn: false,
+  enableReminder: true,
+  enablePreReminder: true,
+  reminderTimeUnit: 'minutes',
+  reminderTime: 10
+}
+
 export const getSetting = async () => {
   const setting = await electron.store.get('setting');
   return setting;
