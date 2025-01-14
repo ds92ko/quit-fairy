@@ -24,5 +24,4 @@ const createWorkStatus = () => {
   }
 }
 
-
 export const workStatus = createWorkStatus();
