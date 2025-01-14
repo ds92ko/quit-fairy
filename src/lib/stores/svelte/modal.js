@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export const modal = writable({
+const initialModal = {
   open: false,
   title: {
     icon: '',
@@ -15,4 +15,24 @@ export const modal = writable({
     label: '취소',
     callback: () => {}
   },
-});
+};
+
+const createModal = () => {
+  const { subscribe, update, set } = writable({ ...initialModal});
+
+  return {
+    subscribe,
+    open: (modal) => {
+      update(current => ({
+        ...current,
+        ...modal,
+        open: true
+      }));
+    },
+    close: () => {
+      set({ ...initialModal });
+    }
+  }
+}
+
+export const modal = createModal();

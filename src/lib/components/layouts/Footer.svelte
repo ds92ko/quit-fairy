@@ -58,9 +58,7 @@
   }
 
   const handleDeleteWorkLogs = () => {
-    modal.update(current => ({
-      ...current,
-      open: true,
+    modal.open({
       title: {
         icon: '⚠️',
         text: '근무 기록 전체 삭제'
@@ -78,7 +76,7 @@
           notification.set({ message: '근무 기록을 모두 삭제했습니다! 🗑️', enableSystemNotification: false});
         }
       },
-    }))
+    })
   }
 
   const handleSetSetting = () => {

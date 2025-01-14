@@ -3,31 +3,14 @@
   
   import { modal } from '@/stores/svelte/modal';
 
-  const initialModal = {
-    open: false,
-    title: {
-      icon: '',
-      text: ''
-    },
-    contents: [],
-    confirm: {
-      label: '확인',
-      callback: () => {}
-    },
-    cancel: {
-      label: '취소',
-      callback: () => {}
-    },
-  };
-
   const handleConfirm = () => {
     $modal.confirm?.callback();
-    modal.set({ ...initialModal });
+    modal.close();
   }
 
   const handleCancel = () => {
     $modal.cancel?.callback();
-    modal.set({ ...initialModal });
+    modal.close();
   }
 </script>
 
