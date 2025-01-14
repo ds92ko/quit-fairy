@@ -3,14 +3,12 @@
   
   import { setSetting } from '@/stores/electron/setting';
   import { deleteWorkLog, setWorkLog, getWorkLog } from '@/stores/electron/workLog';
+  
   import { modal } from '@/stores/svelte/modal';
   import { notification } from '@/stores/svelte/notification';
   import { tab } from '@/stores/svelte/tab';
+  import { workStatus } from '@/stores/svelte/workStatus';
 
-  export let isHalfDay = false;
-  export let hasLunch = false;
-  export let clockInTime = new Date();
-  export let clockOutTime;
   export let logData = [];
   export let settingData = {
     autoClockIn: false,
@@ -23,35 +21,32 @@
   let disabled = true;
 
   const handleSetWorkLog = () => {
-    if (clockOutTime) {
+    if ($workStatus.clockOutTime) {
       setWorkLog({
-        clockInTime,
-        scheduledOutTime: clockOutTime,
+        clockInTime: $workStatus.clockInTime,
+        scheduledOutTime: $workStatus.clockOutTime,
         actualOutTime: new Date(),
-        isHalfDay,
-        hasLunch,
+        isHalfDay: $workStatus.isHalfDay,
+        hasLunch: $workStatus.hasLunch,
       });
 
-      isHalfDay = false;
-      hasLunch = false;
-      clockInTime = new Date();
-      clockOutTime = null;
+      workStatus.reset();
       tab.update(current => ({ ...current, current: '근무 설정' }));
       notification.set({ message: '퇴근했습니다! 오늘도 수고하셨습니다 😚', enableSystemNotification: true });
     } else {
-      const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
-      const outTime = new Date(clockInTime);
+      const workHours = $workStatus.isHalfDay ? ($workStatus.hasLunch ? 5 : 4) : 9;
+      const outTime = new Date($workStatus.clockInTime);
 
       outTime.setHours(outTime.getHours() + workHours);
 
       setWorkLog({
-        clockInTime,
+        clockInTime: $workStatus.clockInTime,
         scheduledOutTime: outTime,
-        isHalfDay,
-        hasLunch,
+        isHalfDay: $workStatus.isHalfDay,
+        hasLunch: $workStatus.hasLunch,
       });
 
-      clockOutTime = outTime;
+      workStatus.set({ clockOutTime: outTime });
       tab.update(current => ({ ...current, current: '근무 상태' }));
       notification.set({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
     }
@@ -73,7 +68,7 @@
         callback: async () => {
           await deleteWorkLog();
           logData = [...await getWorkLog()];
-          notification.set({ message: '근무 기록을 모두 삭제했습니다! 🗑️', enableSystemNotification: false});
+          notification.set({ message: '근무 기록을 모두 삭제했습니다! 🗑️', enableSystemNotification: false });
         }
       },
     })
@@ -95,7 +90,7 @@
       {:else if $tab.current === '설정'}
         <Button filled on:click={handleSetSetting}>저장하기</Button>
       {:else}
-        <Button filled on:click={handleSetWorkLog}>{clockOutTime ? '퇴근' : '출근'}하기</Button>
+        <Button filled on:click={handleSetWorkLog}>{$workStatus.clockOutTime ? '퇴근' : '출근'}하기</Button>
       {/if}
     </div>
   </div>

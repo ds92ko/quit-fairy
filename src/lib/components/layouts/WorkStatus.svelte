@@ -1,5 +1,5 @@
 <script>
-  export let clockOutTime;
+  import { workStatus } from '@/stores/svelte/workStatus'; 
 
   let status, src;
   const statusMessageMap = {
@@ -8,7 +8,7 @@
     OVERTIME: '야근 중! 퇴근은 조금만 더! 🦸‍♂️💼'
   }
 
-  $: status = !clockOutTime ? 'BEFORE_WORK' : new Date() > clockOutTime ? 'OVERTIME' : 'WORKING';
+  $: status = !$workStatus.clockOutTime ? 'BEFORE_WORK' : new Date() > $workStatus.clockOutTime ? 'OVERTIME' : 'WORKING';
   $: src = `/images/${status.toLowerCase()}.png`;
 </script>
 

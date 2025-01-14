@@ -3,27 +3,24 @@
 
   import { formatDate, formatTime, formatDuration } from '@/utils/format';
   
+  import { workStatus } from '@/stores/svelte/workStatus'; 
+
   import CircleProgressBar from '@/components/routes/work-tracker/CircleProgressBar.svelte';
 
-  export let isHalfDay = false;
-  export let hasLunch = false;
-  export let clockInTime = new Date();
-  export let clockOutTime;
-
-  const workType = isHalfDay ? `식사 ${hasLunch ? '포함' : '제외'} 반차 사용` : '종일';
-  const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
+  const workType = $workStatus.isHalfDay ? `식사 ${$workStatus.hasLunch ? '포함' : '제외'} 반차 사용` : '종일';
+  const workHours = $workStatus.isHalfDay ? ($workStatus.hasLunch ? 5 : 4) : 9;
 
   let infoMessage = '';
   let progress = 0;
   let workingTime = 0;
 
   const updateRemainingTime = () => {
-    if (clockOutTime) {
-      const timeDiff = clockOutTime - new Date();
+    if ($workStatus.clockOutTime) {
+      const timeDiff = $workStatus.clockOutTime - new Date();
 
       if (timeDiff > 0) {
         infoMessage = `${formatDuration(timeDiff)} 후 퇴근`;
-        workingTime = (new Date() - clockInTime) / (clockOutTime - clockInTime);
+        workingTime = (new Date() - $workStatus.clockInTime) / ($workStatus.clockOutTime - $workStatus.clockInTime);
         progress = Math.min(workingTime * 100, 100);
         progress = Math.floor(progress);
       } else {
@@ -50,12 +47,12 @@
   <H3>{workType} {workHours}시간 근무</H3>
   <div class="card">
     <FormField name="🕘 IN">
-      <p>{formatDate(clockInTime)}</p>
-      <p>{formatTime(clockInTime)}</p>
+      <p>{formatDate($workStatus.clockInTime)}</p>
+      <p>{formatTime($workStatus.clockInTime)}</p>
     </FormField>
     <FormField name="🕕 OUT">
-      <p>{formatDate(clockOutTime)}</p>
-      <p>{formatTime(clockOutTime)}</p>
+      <p>{formatDate($workStatus.clockOutTime)}</p>
+      <p>{formatTime($workStatus.clockOutTime)}</p>
     </FormField>
   </div>
 </section>

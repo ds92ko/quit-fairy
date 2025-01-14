@@ -3,8 +3,10 @@
 
   import { getSetting } from '@/stores/electron/setting';
   import { setWorkLog } from '@/stores/electron/workLog';
+  
   import { notification } from '@/stores/svelte/notification';
   import { tab } from '@/stores/svelte/tab';
+  import { workStatus } from '@/stores/svelte/workStatus'; 
 
   import Header from '@/components/layouts/Header.svelte';
   import Nav from '@/components/layouts/Nav.svelte';
@@ -19,10 +21,6 @@
   import Toast from '@/components/common/Toast.svelte';
   import Modal from '@/components/common/Modal.svelte';
 
-  let isHalfDay = false;
-  let hasLunch = false;
-  let clockInTime;
-  let clockOutTime;
   let logData = [];
   let settingData = {
     autoClockIn: false,
@@ -39,7 +37,7 @@
     
     if (settingData.autoClockIn) {
       const now = new Date();
-      const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
+      const workHours = $workStatus.isHalfDay ? ($workStatus.hasLunch ? 5 : 4) : 9;
       const outTime = new Date(now);
 
       outTime.setHours(outTime.getHours() + workHours);
@@ -47,32 +45,32 @@
       setWorkLog({
         clockInTime: now,
         scheduledOutTime: outTime,
-        isHalfDay,
-        hasLunch,
+        isHalfDay: $workStatus.isHalfDay,
+        hasLunch: $workStatus.hasLunch,
       });
 
-      clockInTime = now;
-      clockOutTime = outTime;
+      workStatus.set({
+        clockInTime: now,
+        clockOutTime: outTime
+      });
       tab.update(current => ({ ...current, current: '근무 상태' }));
       notification.set({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
     }
   };
 
   const scheduleNotifications = () => {
-    if (!clockOutTime) return;
+    if (!$workStatus.clockOutTime) return;
 
     const now = new Date();
-    const timeToClockOut = clockOutTime - now;
+    const timeToClockOut = $workStatus.clockOutTime - now;
 
     if (reminderTimeout) clearTimeout(reminderTimeout);
     if (preReminderTimeout) clearTimeout(preReminderTimeout);
     
-    if (settingData.enableReminder) {
-      if (timeToClockOut > 0) {
-        reminderTimeout = setTimeout(() => {
-          notification.set({ message: '퇴근 시간이 되었어요! 😊', enableSystemNotification: true });
-        }, timeToClockOut);
-      }
+    if (settingData.enableReminder && timeToClockOut > 0) {
+      reminderTimeout = setTimeout(() => {
+        notification.set({ message: '퇴근 시간이 되었어요! 😊', enableSystemNotification: true });
+      }, timeToClockOut);
     }
 
     if (settingData.enablePreReminder) {
@@ -90,7 +88,7 @@
     }
   };
 
-  $: clockOutTime, settingData, scheduleNotifications();
+  $: $workStatus.clockOutTime, settingData, scheduleNotifications();
 
   onMount(() => {
     scheduleNotifications();
@@ -98,12 +96,8 @@
   });
 
   onDestroy(() => {
-    if (reminderTimeout) {
-      clearTimeout(reminderTimeout);
-    }
-    if (preReminderTimeout) {
-      clearTimeout(preReminderTimeout);
-    }
+    if (reminderTimeout) clearTimeout(reminderTimeout);
+    if (preReminderTimeout) clearTimeout(preReminderTimeout);
   });
 </script>
 
@@ -111,12 +105,12 @@
 
 <main>
   <div class="container">
-    <WorkStatus {clockOutTime} />
-    <Nav {clockOutTime} />
+    <WorkStatus />
+    <Nav />
     {#if $tab.current === '근무 상태'}
-      <WorkTracker {isHalfDay} {hasLunch} {clockInTime} {clockOutTime} />
+      <WorkTracker />
     {:else if $tab.current === '근무 설정'}
-      <WorkSetup bind:isHalfDay bind:hasLunch bind:clockInTime />
+      <WorkSetup />
     {:else if $tab.current === '근무 기록'}
       <WorkLogs bind:logData />
     {:else if $tab.current === '설정'}
@@ -126,5 +120,5 @@
 </main>
 
 <Toast />
-<Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:logData bind:settingData />
+<Footer bind:logData bind:settingData />
 <Modal />

@@ -2,16 +2,17 @@
   import { Tabs } from 'attractions';
 
   import { tab } from '@/stores/svelte/tab';
+  import { workStatus } from '@/stores/svelte/workStatus';
 
-  export let clockOutTime;
-
-  $: clockOutTime, tab.update(current => ({
-    ...current,
-    items: current.items.map((item, index) => {
-      if (index === 0) return clockOutTime ? '근무 상태' : '근무 설정';
-      return item;
-    })
-  }))
+  $: {
+    tab.update(current => ({
+      ...current,
+      items: current.items.map((item, index) => {
+        if (index === 0) return $workStatus.clockOutTime ? '근무 상태' : '근무 설정';
+        return item;
+      }),
+    }));
+  }
 </script>
 
 <div class="nav">
