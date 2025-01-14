@@ -3,6 +3,7 @@
 
   import { getSetting } from '@/stores/electron/setting';
   import { setWorkLog } from '@/stores/electron/workLog';
+  import { notification } from '@/stores/svelte/notification';
 
   import Header from '@/components/layouts/Header.svelte';
   import Nav from '@/components/layouts/Nav.svelte';
@@ -31,40 +32,8 @@
     reminderTimeUnit: 'minutes',
     reminderTime: 10
   }
-  let notification = {
-    message: '',
-    enableSystemNotification: true,
-  };
-  let notificationTimeout;
   let reminderTimeout;
   let preReminderTimeout;
-
-  const requestNotificationPermission = async () => {
-    if (Notification.permission !== 'granted') {
-      await Notification.requestPermission();
-    }
-  }
-
-  const setNotification = ({ message, enableSystemNotification }) => {
-    if (notificationTimeout) {
-      clearTimeout(notificationTimeout);
-    }
-
-    notification = { 
-      message, 
-      enableSystemNotification
-    };
-
-    if (enableSystemNotification) {
-      requestNotificationPermission().then(() => {
-        new Notification('칼퇴 요정', { body: message });
-      });
-    }
-
-    notificationTimeout = setTimeout(() => {
-      notification = { message: '', enableSystemNotification: true };
-    }, 2000);
-  }
 
   const setAutoClockIn = async () => {
     settingData = await getSetting();
@@ -86,7 +55,7 @@
       clockInTime = now;
       clockOutTime = outTime;
       selectedTab = '근무 상태';
-      setNotification({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
+      notification.set({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
     }
   };
 
@@ -102,7 +71,7 @@
     if (settingData.enableReminder) {
       if (timeToClockOut > 0) {
         reminderTimeout = setTimeout(() => {
-          setNotification({ message: '퇴근 시간이 되었어요! 😊', enableSystemNotification: true });
+          notification.set({ message: '퇴근 시간이 되었어요! 😊', enableSystemNotification: true });
         }, timeToClockOut);
       }
     }
@@ -113,7 +82,7 @@
 
       if (timeToReminder > 0) {
         preReminderTimeout = setTimeout(() => {
-          setNotification({ 
+          notification.set({ 
             message: `퇴근 ${settingData.reminderTime}${settingData.reminderTimeUnit === 'minutes' ? '분' : '시간'} 전입니다! 마무리 작업을 시작하세요 😊`, 
             enableSystemNotification: true 
           });
@@ -154,9 +123,6 @@
   </div>
 </main>
 
-{#if notification.message}
-  <Toast message={notification.message} />
-{/if}
-
-<Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:selectedTab bind:logData bind:settingData {setNotification} />
+<Toast />
+<Footer bind:isHalfDay bind:hasLunch bind:clockInTime bind:clockOutTime bind:selectedTab bind:logData bind:settingData />
 <Modal />

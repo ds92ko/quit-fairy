@@ -1,14 +1,15 @@
 <script>
   import { Snackbar } from 'attractions';
-
-  export let message = '';
+  import { notification } from '@/stores/svelte/notification';
 </script>
 
-<div class="toast">
-  <div class="container">
-    <Snackbar text={message} transitionOptions={{ x: 0, y: 20, duration: 150 }} closeCallback={() => {}} />
+{#if $notification.message}
+  <div class="toast">
+    <div class="container">
+      <Snackbar text={$notification.message} transitionOptions={{ x: 0, y: 20, duration: 150 }} closeCallback={() => {}} />
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   .toast {

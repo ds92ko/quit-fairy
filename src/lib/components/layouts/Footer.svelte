@@ -3,6 +3,7 @@
   import { setSetting } from '@/stores/electron/setting.js';
   import { deleteWorkLog, setWorkLog, getWorkLog } from '@/stores/electron/workLog.js';
   import { modal } from '@/stores/svelte/modal.js';
+  import { notification } from '@/stores/svelte/notification';
 
   export let isHalfDay = false;
   export let hasLunch = false;
@@ -17,7 +18,6 @@
     reminderTimeUnit: 'minutes',
     reminderTime: 10
   };
-  export let setNotification;
 
   let disabled = true;
 
@@ -36,7 +36,7 @@
       clockInTime = new Date();
       clockOutTime = null;
       selectedTab = '근무 설정';
-      setNotification({ message: '퇴근했습니다! 오늘도 수고하셨습니다 😚', enableSystemNotification: true });
+      notification.set({ message: '퇴근했습니다! 오늘도 수고하셨습니다 😚', enableSystemNotification: true });
     } else {
       const workHours = isHalfDay ? (hasLunch ? 5 : 4) : 9;
       const outTime = new Date(clockInTime);
@@ -52,7 +52,7 @@
 
       clockOutTime = outTime;
       selectedTab = '근무 상태';
-      setNotification({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
+      notification.set({ message: '출근했습니다! 오늘도 화이팅하세요 💪', enableSystemNotification: true });
     }
   }
 
@@ -74,7 +74,7 @@
         callback: async () => {
           await deleteWorkLog();
           logData = [...await getWorkLog()];
-          setNotification({ message: '근무 기록을 모두 삭제했습니다! 🗑️', enableSystemNotification: false});
+          notification.set({ message: '근무 기록을 모두 삭제했습니다! 🗑️', enableSystemNotification: false});
         }
       },
     }))
@@ -82,7 +82,7 @@
 
   const handleSetSetting = () => {
     setSetting(settingData);
-    setNotification({ message: '설정을 저장했습니다! 🎉', enableSystemNotification: false });
+    notification.set({ message: '설정을 저장했습니다! 🎉', enableSystemNotification: false });
   }
 
   $: disabled = logData.length === 0;
