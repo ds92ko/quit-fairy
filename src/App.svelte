@@ -19,7 +19,6 @@
   import Toast from '@/components/common/Toast.svelte';
   import Modal from '@/components/common/Modal.svelte';
 
-  let currentTime = new Date();
   let isHalfDay = false;
   let hasLunch = false;
   let clockInTime;
@@ -108,7 +107,7 @@
   });
 </script>
 
-<Header bind:currentTime />
+<Header />
 
 <main>
   <div class="container">

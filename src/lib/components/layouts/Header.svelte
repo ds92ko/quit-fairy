@@ -1,7 +1,7 @@
 <script>
   import { formatDate, formatTime } from '@/utils/format';
   
-  export let currentTime = new Date();
+  let currentTime = new Date();
 
   setInterval(() => currentTime = new Date(), 100);
 </script>
